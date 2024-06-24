@@ -8,83 +8,9 @@
 
 \maketitle
 
-\begin{enumerate}
-	\item Background (SoTA) overview
-		\begin{itemize}
-			\item Graph learning intro
-				\begin{itemize}
-					\item Why graphs?
-					\item Tasks
-						\begin{itemize}
-							\item Node classification
-							\item Link prediction
-							\item Graph classification
-						\end{itemize}
-					\item Transductive vs. inductive tasks
-					\item \cite{gori_new_2005} - overview
-				\end{itemize}
-			\item Random walk based models
-				\begin{itemize}
-					\item DeepWalk
-					\item LINE?
-					\item Node2Vec
-				\end{itemize}
-			\item MPNNs / convolutional models
-				\begin{itemize}
-					\item Introduction to message passing
-					\item GCN
-					\item GraphSAGE
-				\end{itemize}
-			\item WL test and expressivity in GNNs
-				\begin{itemize}
-					\item The WL test
-					\item The WL test and graph convolution
-					\item GIN?
-					\item Oversmoothing in graphs
-					\item Oversquashing in graphs
-					\item The 4 Gs?
-				\end{itemize}
-			\item Explainability on graphs
-				\begin{itemize}
-					\item Overview of graph explainability
-					\item Instance-level post-hoc explainability
-						\begin{itemize}
-							\item Gradient-based methods
-								\begin{itemize}
-									\item Grad-CAM
-								\end{itemize}
-							\item Surrogate methods
-								\begin{itemize}
-									\item GraphLime
-								\end{itemize}
-							\item Perturbation-based methods
-								\begin{itemize}
-									\item GNNExplainer
-									\item PGExplainer
-									\item SubgraphX
-								\end{itemize}
-						\end{itemize}
-					\item Model-level explainability
-						\begin{itemize}
-							\item XGNN
-							\item GraphChef?
-						\end{itemize}
-				\end{itemize}
-		\end{itemize}
-	\item My research so far
-		\begin{itemize}
-			\item Graph coarsening for efficient GNNs -- HARP based approach (\cite{dedic_balancing_2023, dedic_balancing_2024})
-			\item Graph coarsening for efficient GNNs -- direct edge collapsing (\cite{prochazka_scalable_2022})
-			\item Graph properties and their role in classification and its performance (\cite{prochazka_which_2023})
-			\item Maybe something more recent with explainability?
-		\end{itemize}
-	\item Future ideas and intended directions
-		\begin{itemize}
-			\item Graph explainability
-			\item GNN HPO
-			\item Simple graph models such as RMG?
-		\end{itemize}
-\end{enumerate}
+\input{src/sota-overview.tex}
+\input{src/my-research.tex}
+\input{src/future.tex}
 
 \printbibliography
 
