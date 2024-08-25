@@ -1,4 +1,4 @@
-\ctusetup{
+\ctusetup{%
 	author = {Marek Dědič},
 	supervisor = {prof. RNDr. Ing. Martin Holeňa, CSc.},
 	supervisor-address = {Ústav informatiky AV ČR, v.v.i.,\\ Pod Vodárenskou věží 271/2,\\ 182 00 Praha 8},
@@ -21,8 +21,22 @@
 \ctuprocess
 
 \usepackage[style=iso-authoryear]{biblatex}
+\usepackage{bm}
 \usepackage{csquotes}
+\usepackage{caption}
+\usepackage{subcaption}
 \usepackage{todonotes}
 
 \addbibresource{zotero.bib}
 
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[chapter]
+
+\theoremstyle{definition}
+\newtheorem{example}[theorem]{Example}
+
+\newcommand{\name}{\emph}
+\newcommand{\mathfield}{\ensuremath{\mathbb}}
+\newcommand{\mathmat}{\bm}
+\newcommand{\mathspace}{\ensuremath{\mathcal}}
+\newcommand{\mathvec}{\bm}
