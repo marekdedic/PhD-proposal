@@ -1,68 +1,5 @@
-\chapter{Background (SoTA) overview}
+\chapter{Overview of the state of the art in graph learning and explainability}
 \label{chap:sota}
-
-\begin{itemize}
-	\item Graph learning intro
-		\begin{itemize}
-			\item Why graphs?
-			\item Tasks
-				\begin{itemize}
-					\item Node classification
-					\item Link prediction
-					\item Graph classification
-				\end{itemize}
-			\item Transductive vs.\ inductive tasks
-			\item \cite{gori_new_2005} - overview
-		\end{itemize}
-	\item Random walk based models
-		\begin{itemize}
-			\item DeepWalk
-			\item LINE?
-			\item Node2Vec
-		\end{itemize}
-	\item MPNNs / convolutional models
-		\begin{itemize}
-			\item Introduction to message passing
-			\item GCN
-			\item GraphSAGE
-		\end{itemize}
-	\item WL test and expressivity in GNNs
-		\begin{itemize}
-			\item The WL test
-			\item The WL test and graph convolution
-			\item GIN?
-			\item Oversmoothing in graphs
-			\item Oversquashing in graphs
-			\item The 4 Gs?
-		\end{itemize}
-	\item Explainability on graphs
-		\begin{itemize}
-			\item Overview of graph explainability
-			\item Instance-level post-hoc explainability
-				\begin{itemize}
-					\item Gradient-based methods
-						\begin{itemize}
-							\item Grad-CAM
-						\end{itemize}
-					\item Surrogate methods
-						\begin{itemize}
-							\item GraphLime
-						\end{itemize}
-					\item Perturbation-based methods
-						\begin{itemize}
-							\item GNNExplainer
-							\item PGExplainer
-							\item SubgraphX
-						\end{itemize}
-				\end{itemize}
-			\item Model-level explainability
-				\begin{itemize}
-					\item XGNN
-					\item GraphChef?
-				\end{itemize}
-		\end{itemize}
-\end{itemize}
-
 
 \section{Machine Learning Tasks on Graphs}
 
@@ -132,7 +69,7 @@ Formally, for a graph \( G = (V, E) \), the state \( \mathvec{h}_i \) is defined
 \begin{equation}\label{eq:gori-state}
 	\mathvec{h}_i = f_\theta \left( y_i, \mathvec{h}_{\mathrm{ne}[v_i]}, y_{\mathrm{ne}[v_i]} \right) , \quad v_i \in V
 \end{equation}
-where \( y_i \) is the label of node \( v_i \), and \( \mathvec{h}_{\mathrm{ne}[v_i]} \), \( y_{\mathrm{ne}[v_i]} \) represent the states and labels of the neighbouring nodes of \( v_i \), respectively. An output vector \( \mathvec{o}_i \in \mathfield{R}^d \) for each node \( v_i \) is defined using a parametric output function \( g_\theta \):
+where \( y_i \) is the label of node \( v_i \), and \( \mathvec{h}_{\mathrm{ne}[v_i]} \), \( y_{\mathrm{ne}[v_i]} \) represent the states and labels of the neighboring nodes of \( v_i \), respectively. An output vector \( \mathvec{o}_i \in \mathfield{R}^d \) for each node \( v_i \) is defined using a parametric output function \( g_\theta \):
 \begin{equation}\label{eq:gori-output}
 	\mathvec{o}_i = g_\theta \left( \mathvec{h}_i, y_i \right) , \quad v_i \in V
 \end{equation}
@@ -198,7 +135,7 @@ Random walk-based models utilize random walks to explore the structure of a grap
 	\label{fig:deepwalk-motivation}
 \end{figure}
 
-The DeepWalk algorithm generally consists of two steps -- the generation of random walks from a graph and the extraction of node embeddings from these random walks. The first step is fairly straightforward, the algorithm chooses a random node \( v_i \in V \) as the starting point of the random walk \( \mathcal{W}_{v_i} \) and then constructs the random walk one node at a time by sampling uniformly from the neighbours of the last visited node. This process continues until a desired maximum length \( t \) is reached. In practice, this length is constant across all the random walks generated.
+The DeepWalk algorithm generally consists of two steps -- the generation of random walks from a graph and the extraction of node embeddings from these random walks. The first step is fairly straightforward, the algorithm chooses a random node \( v_i \in V \) as the starting point of the random walk \( \mathcal{W}_{v_i} \) and then constructs the random walk one node at a time by sampling uniformly from the neighbors of the last visited node. This process continues until a desired maximum length \( t \) is reached. In practice, this length is constant across all the random walks generated.
 
 Once a sufficient number of random walks has been generated, these can be used to obtain the node embedding \( \Phi : V \to \mathfield{R}^{\left\lvert V \right\rvert \times d} \). Intuitively, this embedding should maximize the likelihood of observing a given node given all the preceding nodes in the random walk, that is for a random walk \( \mathcal{W} = \left( v_1, v_2, \dots, v_t \right) \), it would maximize
 \begin{equation}\label{eq:next-node-probability}
@@ -221,19 +158,19 @@ The algorithm realizes the embedding \( \Phi \) as a matrix of individual node e
 
 \name{Node2vec} is an algorithm designed to learn continuous feature representations of nodes in a graph by optimizing a neighborhood preserving objective. Unlike previous graph embedding techniques such as DeepWalk that often focus solely on structural equivalence, node2vec introduces a flexible notion of a node's neighborhood, allowing it to capture both the homophily and structural equivalence properties of nodes. It achieves this through a biased random walk strategy that balances breadth-first and depth-first graph traversal, thereby capturing diverse patterns in the data. This flexibility enables node2vec to generate representations that are well-suited for various downstream machine learning tasks.
 
-The node2vec algorithm differs from DeepWalk mainly in the way random walks are sampled from the graph, the following extraction of node embeddings is largely the same. Where DeepWalk generated random walks by uniformly sampling among the last node's neighbours in each step, node2vec considers a node's neighbourhood \( \mathrm{ne}_S [ v_i ] \) as the primary area of interest, with varying neigbourhood sampling strategies S. To this end, node2vec seeks to maximize the following objective:
+The node2vec algorithm differs from DeepWalk mainly in the way random walks are sampled from the graph, the following extraction of node embeddings is largely the same. Where DeepWalk generated random walks by uniformly sampling among the last node's neighbors in each step, node2vec considers a node's neighborhood \( \mathrm{ne}_S [ v_i ] \) as the primary area of interest, with varying neigbourhood sampling strategies S. To this end, node2vec seeks to maximize the following objective:
 \begin{equation}\label{eq:node2vec-objective}
 	\sum_{v_i \in V} P \left( \mathrm{ne}_S[v_i] \middle| \Phi \left( v_i \right) \right)
 \end{equation}
-This objective is simplified further by assuming conditional independence between the likelihoods of observing different neighbouring nodes, i.e.
+This objective is simplified further by assuming conditional independence between the likelihoods of observing different neighboring nodes, i.e.
 \begin{equation}
 	P \left( \mathrm{ne}_S[v_i] \middle| \Phi \left( v_i \right) \right) = \prod_{v_j \in \mathrm{ne}_S[v_i]} P \left( v_j \middle| \Phi \left( v_i \right) \right)
 \end{equation}
-The choice of the neigbourhood sampling strategy \( S \) is central to node2vec, with the two most extreme options being \name{breadth-first search} (BFS), where \( \mathrm{ne}_S [ v_i ] \) is restricted to immeadiate neighbours of \( v_i \), and \name{depth-first search} (DFS), where nodes are sampled at ever increasing distances from \( v_i \)
+The choice of the neigbourhood sampling strategy \( S \) is central to node2vec, with the two most extreme options being \name{breadth-first search} (BFS), where \( \mathrm{ne}_S [ v_i ] \) is restricted to immeadiate neighbors of \( v_i \), and \name{depth-first search} (DFS), where nodes are sampled at ever increasing distances from \( v_i \)
 
-Graph representation learning algorithms frequently consider two different kind of node similarities, homophily and structural equivalence. When considering homophily, nodes of the same kind are often connected and relatively close together in the graph, which an embedding obtained with BFS would be able to capture. On the other hand, under structural equivalence, two nodes of the same kind may play the same role withing their respective local neighbourhoods, without necessarily being close to one another. An embedding obtained by DFS would be a good representation for such a case. The node2vec random walk generation algorithm is capable of interpolating between BFS and DFS, therefore being suitable for graphs mainly governed by homophily as well as graphs which are better described by structural equivalence.
+Graph representation learning algorithms frequently consider two different kind of node similarities, homophily and structural equivalence. When considering homophily, nodes of the same kind are often connected and relatively close together in the graph, which an embedding obtained with BFS would be able to capture. On the other hand, under structural equivalence, two nodes of the same kind may play the same role withing their respective local neighborhoods, without necessarily being close to one another. An embedding obtained by DFS would be a good representation for such a case. The node2vec random walk generation algorithm is capable of interpolating between BFS and DFS, therefore being suitable for graphs mainly governed by homophily as well as graphs which are better described by structural equivalence.
 
-In order to be able to interpolate between BFS and DFS, the node2vec algorithm considers 2 parameters, \( p \) and \( q \), that control how the random walk is generated. Consider a scenario where the random walk just traversed the edge \( \left( t, v \right) \) and now decides where to continue from the node \( v \). In DeepWalk, the neighbours of \( v_i \) have the same probability \( \frac{1}{\left\lvert \mathrm{ne}[v] \right\rvert} \) of being the next node. With node2vec, this probability is multiplied by a weight \( \alpha_{pq} \left( t, x \right) \) for each candidate node \( x \). This weight is defined as
+In order to be able to interpolate between BFS and DFS, the node2vec algorithm considers 2 parameters, \( p \) and \( q \), that control how the random walk is generated. Consider a scenario where the random walk just traversed the edge \( \left( t, v \right) \) and now decides where to continue from the node \( v \). In DeepWalk, the neighbors of \( v_i \) have the same probability \( \frac{1}{\left\lvert \mathrm{ne}[v] \right\rvert} \) of being the next node. With node2vec, this probability is multiplied by a weight \( \alpha_{pq} \left( t, x \right) \) for each candidate node \( x \). This weight is defined as
 \begin{equation}\label{node2vec-weight}
 	\alpha_{pq} \left( t, x \right) = \begin{cases}
 		\frac{1}{p} & \text{for}\ x = t \\
@@ -252,7 +189,7 @@ This arrangement of weights is schematically visualized in Figure~\ref{fig:node2
 
 \subsection{Convolutional Models}
 
-Convolutional Graph Neural Networks have emerged as a powerful framework for learning on graph-structured data, bridging the gap between traditional graph theory and modern deep learning techniques. At the core of convolutional GNNs lies the Message Passing Neural Network (MPNN) paradigm (see \cite{gilmer_neural_2017}), which provides a flexible and effective mechanism for aggregating information from a node's local neighbourhood. This paradigm is inspired by the concept of convolution in image processing, where information from neighbouring pixels is combined to learn localized features. Similarly, in the graph domain, the MPNN paradigm allows for the propagation of information across nodes by iteratively exchanging and aggregating messages between neighboring nodes. This process enables the model to capture both local and global structural information within a graph, making it particularly well-suited for tasks such as node classification, graph classification, link prediction, and community detection. By leveraging the inherent relational structure of graphs, convolutional GNNs utilizing the MPNN paradigm have shown remarkable performance across a wide range of applications, from social network analysis to molecular biology, demonstrating their versatility and effectiveness in learning from complex, non-Euclidean data.
+Convolutional Graph Neural Networks have emerged as a powerful framework for learning on graph-structured data, bridging the gap between traditional graph theory and modern deep learning techniques. At the core of convolutional GNNs lies the Message Passing Neural Network (MPNN) paradigm (see \cite{gilmer_neural_2017}), which provides a flexible and effective mechanism for aggregating information from a node's local neighborhood. This paradigm is inspired by the concept of convolution in image processing, where information from neighboring pixels is combined to learn localized features. Similarly, in the graph domain, the MPNN paradigm allows for the propagation of information across nodes by iteratively exchanging and aggregating messages between neighboring nodes. This process enables the model to capture both local and global structural information within a graph, making it particularly well-suited for tasks such as node classification, graph classification, link prediction, and community detection. By leveraging the inherent relational structure of graphs, convolutional GNNs utilizing the MPNN paradigm have shown remarkable performance across a wide range of applications, from social network analysis to molecular biology, demonstrating their versatility and effectiveness in learning from complex, non-Euclidean data.
 
 The formalisation of the message-passing paradigm is fairly straightforward and in some sense similar to the original GNN as described in Section~\ref{sec:gori}. The message passing process runs for \( T \) time steps and is defined with a message function \( M_t \) and a node update function \( U_t \). A hidden state vector \( \mathvec{h}_i^{(t)} \) is assigned to each node \( v_i \) and updated based on messages \( \mathvec{m}_i^{(t+1)} \) according to
 \begin{equation}\label{eq:message-passing}
@@ -292,6 +229,74 @@ The choices behind the specific modifications of the simple update rule are furt
 		U_t \left( \mathvec{h}_i^{(t)}, \mathvec{m}_i^{(t+1)} \right) &= \sigma \left( \mathmat{W}^{(t)} \mathvec{m}_i^{(t+1)} \right). \\
 	\end{split}
 \end{equation}
-Seeing as each layer of GCN aggregates to each node messages from its 1-hop neighbourhood, the amount to which the algorithm is concerned with the local neigbourhood of each node versus the global structure of the graph can be controlled by the number of GCN layers. To achieve sufficient representational power, the GCN layers are frequently used in conjunction with subsequent feedforward layers that further process the information aggregated by the convolutional part in each node independently.
+Seeing as each layer of GCN aggregates to each node messages from its 1-hop neighborhood, the amount to which the algorithm is concerned with the local neigbourhood of each node versus the global structure of the graph can be controlled by the number of GCN layers. To achieve sufficient expressive power, the GCN layers are frequently used in conjunction with subsequent feedforward layers that further process the information aggregated by the convolutional part in each node independently.
 
 \subsubsection{GraphSAGE}
+
+Low-dimensional embeddings of nodes in graphs are critical for numerous predictive tasks, such as content recommendation and protein function identification. All of the previous methods for generating these embeddings are transductive, relying on a fixed graph structure known at training time. However, real-world applications often require inductive capabilities, meaning embeddings must be generated for unseen nodes or new graphs. To address this, the GraphSAGE (SAmple and AggreGatE) framework introduces an inductive approach that utilizes node feature information to generate embeddings for nodes in unseen data, overcoming the limitations of previous methods.
+
+\begin{figure}
+	\includegraphics[width=\linewidth]{images/GraphSAGE.png}
+	\caption{Schematic representation of a GraphSAGE sampling, aggregation and inference. Original figure from \cite{hamilton_inductive_2017}.}
+	\label{fig:GraphSAGE}
+\end{figure}
+
+GraphSAGE generates embeddings by learning aggregation functions that sample and aggregate features from a node’s local neighborhood. Instead of learning embeddings for each node, GraphSAGE learns a function that can generate embeddings on-the-fly for any node, whether it has been seen during training or not. This function is trained using node feature information and structural properties of the graph. The process is schematically visualized in Figure~\ref{fig:GraphSAGE} and works in two steps -- neigborhood sampling and feature aggregation.
+
+In contrast to previous methods such as GCN, the GraphSAGE algorithm doesn't use the full neigborhood set, instead opting to uniformly size a fixed-size set of neighbors for each node. This gives for each node \( v_i \) a neigborhood sample \( \mathcal{N} \left( v_i \right) \). This sampling incidentally also constraints the computational complexity of the algorithm, which is \( \mathcal{O} \left( \left\lvert V \right\rvert \right) \) for GCN and \( \mathcal{O} \left( K \right) \) for GraphSAGE, where \( K \) is a constant depending only on method hyperparameters (one of which is the size of the neighborhood sample).
+
+To aggregate the features of the graph, GraphSAGE, like many other methods, operates with a vector \( \mathvec{h}_i^{(l)} \) representing the hidden state assigned to node \( v_i \) in layer \( l \). On top of this, another vector \( \mathvec{h}_{\mathcal{N} \left( v_i \right)}^{(l)} \) is introduced, representing the hidden state assigned to the neigborhood of \( v_i \). The iterative process is then described by the following system
+\begin{equation}
+	\begin{split}
+		\mathvec{h}_{\mathcal{N} \left( v_i \right)}^{(l)} &= \mathrm{AGGREGATE}_l \left( \left\{ \mathvec{h}_j^{(l-1)} \middle| v_j \in \mathcal{N} \left( v_i \right) \right\} \right) \\
+		\mathvec{h}_i^{(l)} &= \sigma \left( \mathmat{W}^{(l)} \cdot \mathrm{CONCAT} \left( \mathvec{h}_i^{(l-1)}, \mathvec{h}_{\mathcal{N} \left( v_i \right)}^{(l)} \right) \right) \\
+	\end{split}
+\end{equation}
+where \( \mathrm{AGGREGATE}_l \) is a configurable aggregation function. In theory, this aggregator can be different for each layer, in practice, this is rarely used and the aggreagators are kept the same for all layers. There are several proposed realizations of the aggreagator:
+\begin{itemize}
+	\item \textbf{Mean aggregation}: An aggregator that uses simple element-wise averaging all the neighboring node hidden states. This yields a method that is equivalent to GCN, however, due to the neigborhood sampling, the GraphSAGE variant is an inductive method instead of a transductive one.
+	\item \textbf{LSTM aggregation}: A LSTM module may also be used to aggregate the hidden states, which gives the model greater expressive power compared to the mean aggregation. Of note is the fact that the nodes need to be randomly permuted as the LSTM model is not inherently permutation invariant.
+	\item \textbf{Pooling aggregation}: As an alternative to the LSTM model, a single layer feedforward model may be also used together with element-wise max pooling (or any other pooling operator). This approach is reminiscent of the aggregation often used in multi-instance learning (see \cite{dietterich_solving_1997}).
+\end{itemize}
+
+In summary, GraphSAGE represents a significant advancement in the field of graph-based machine learning, providing a robust framework for inductive node embeddings that generalize to new graphs and unseen nodes. By leveraging node features and a flexible aggregation mechanism, GraphSAGE can efficiently produce embeddings that are useful for various downstream tasks, thus making it a valuable tool for evolving, real-world applications.
+
+\todo[inline,caption={}]{If there is time: WL test and expressivity in GNNs
+	\begin{itemize}
+		\item The WL test
+		\item The WL test and graph convolution
+		\item GIN?
+		\item Oversmoothing in graphs
+		\item Oversquashing in graphs
+		\item The 4 Gs?
+	\end{itemize}
+}
+
+\begin{itemize}
+	\item Explainability on graphs
+		\begin{itemize}
+			\item Overview of graph explainability
+			\item Instance-level post-hoc explainability
+				\begin{itemize}
+					\item Gradient-based methods
+						\begin{itemize}
+							\item Grad-CAM
+						\end{itemize}
+					\item Surrogate methods
+						\begin{itemize}
+							\item GraphLime
+						\end{itemize}
+					\item Perturbation-based methods
+						\begin{itemize}
+							\item GNNExplainer
+							\item PGExplainer
+							\item SubgraphX
+						\end{itemize}
+				\end{itemize}
+			\item Model-level explainability
+				\begin{itemize}
+					\item XGNN
+					\item GraphChef?
+				\end{itemize}
+		\end{itemize}
+\end{itemize}
