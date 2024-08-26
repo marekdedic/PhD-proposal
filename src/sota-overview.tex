@@ -296,12 +296,39 @@ Complex models such as GNNs are difficult to explain due to the complicated and 
 
 GraphLIME is a generalization of the LIME explanation algorithm (see \cite{ribeiro_why_2016}). The main advance over LIME is the selection of a local neighborhood, which is needed by LIME in order to select a surrogate model that matches the predictions of the GNN on a local neighborhood. To achieve this when explaining the prediction of the node \( v_i \), GraphLIME looks at the \( N \)-hop neighborhood \( \mathcal{S}_N \left( v_i \right) \), that is the set of nodes from which exists a path to \( v_i \) consisting of no more than \( N \) edges. When such a neighborhood is found consisting of nodes \( \mathcal{S}_N \left( v_i \right) = \left\{ v_{j_1}, v_{j_2}, \dots, v_{j_N} \right\} \), the set of their corresponding feature vectors and predicted labels from the underlying GNN \( \left\{ \left( \mathvec{x}_{j_k}, \hat{y}_{j_k} \right) \right\}_{k=1}^{N} \) is used as the local dataset to train the surrogate model on. This model is the Hilbert-Schmidt Independence Criterion (HSIC) Lasso (see \cite{yamada_high-dimensional_2014}), a kernel-based feature-selection algorithm. Therefore, the output of the GraphLIME algorithm is a list of features important to the instance being explained, without any explanation of how the local structure of the graph contributes to the prediction.
 
+\subsection{Perturbation-based methods}
+
+Perturbation-based methods are commonly used to explain deep image models. As the name suggests, these approaches analyze how output predictions change in response to various input perturbations. The basic idea is that if crucial input information is preserved, the predictions should remain close to the original ones. Existing methods often involve learning a generator that creates a mask to identify important input pixels for model explanation. However, these techniques are not directly applicable to graph models. Unlike images, graphs consist of nodes and edges, which cannot be resized to have consistent node and edge counts. Moreover, structural information is essential in graphs and plays a key role in their functionality, which may not always be the case for images. A general overview of the structure of perturbation-based methods is shown in Figure~\ref{fig:perturbation-based-explainability}.
+
+\begin{figure}
+	\includegraphics[width=\linewidth]{images/perturbation-based-explainability.pdf}
+	\caption{An overview of the anatomy of a perturbation-based explanation methods. The methods employ masks for nodes, edges and/or features to obscure parts of the graph and then evaluate the importance of those signals based on the results. Original figure from \cite{yuan_explainability_2022}.}
+	\label{fig:perturbation-based-explainability}
+\end{figure}
+
+\subsubsection{GNNExplainer}
+
+GNNExplainer was introduced by \cite{ying_gnnexplainer_2019} as a pioneering method designed to provide interpretable explanations for the predictions made by GNNs. Unlike some other explanation techniques that might be tailored to specific models or limited by architecture, GNNExplainer is a model-agnostic approach, capable of explaining any GNN on any graph-based task. It achieves this by identifying both the most crucial node features as well as the most informative subgraph structures that influence a GNN's decision, thereby providing a clear and concise explanation that enhances model transparency and understanding.
+
+For a given node \( v_i \), whose prediction is to be explained, GNNExplainer first limits the search to \( G_C \subseteq G \), the computational graph of the prediction of this particular node. The goal of the method is then to identify a subgraph \( G_S \subseteq G_C \) and a feature subset \( \mathmat{X}_S = \left\{ \mathvec{x}_i \middle| v_i \in G_S \right\} \) that explain the prediction for the given node. GNNExplainer is then formulated as the following mutual information maximization framework:
+\begin{equation}\label{eq:GNNExplainer}
+	\max_{G_S} \mathrm{MI} \left( Y, \left( G_S, \mathmat{X}_S \right) \right) = \mathrm{H} \left( Y \right) - \mathrm{H} \left( Y \middle| G = G_S, \mathmat{X} = \mathmat{X}_S \right)
+\end{equation}
+where \( \mathrm{MI} \) denotes mutual information, \( \mathrm{H} \) denotes entropy, and \( Y \) is defined as a random variable indicating the probability of nodes belonging to each class. Seeing as the first term on the right-hand side of Equation~\ref{eq:GNNExplainer} is independent of the explanation, the maximization of the mutual information is equivalent to the minimizatation of the last entropy term \( \mathrm{H} \left( Y \middle| G = G_S, \mathmat{X} = \mathmat{X}_S \right) \). Direct optimization of this objective is nonetheless still not tractable given the exponential number of candidate subgraphs. To sidestep this issue, a fractional adjacency matrix \( A_S \in \left[ 0 \right]^{n \times n} \) is considered, enabling us to interpret \( G_S \sim \mathcal{G} \) as a random graph variable. With that, the objective from Equation~\ref{eq:GNNExplainer} is simplified to
+\begin{equation}
+	\min_{\mathcal{G}} \mathbb{E}_{G_S \sim \mathcal{G}} \mathrm{H} \left( Y \middle| G = G_S, \mathmat{X} = \mathmat{X}_S \right).
+\end{equation}
+Assuming convexity, this objective may be further simplified using Jensen's inequality to obtain the following upper bound:
+\begin{equation}
+	\min_{\mathcal{G}} \mathrm{H} \left( Y \middle| G = \mathbb{E}_\mathcal{G} \left[ G_S \right], \mathmat{X} = \mathmat{X}_S \right).
+\end{equation}
+The convexity assumption doesn't actually hold for neural networks, however, thanks to empirical correctness of the results, the upper bound is used despite this fact. Further optimizations can be found in \cite{ying_gnnexplainer_2019}, however, with this objective, \( \mathcal{G} \) may be decomposed into a multivariate Bernoulli distribution and mean-field variational approximation can then be used to tractably estimate \( \mathbb{E}_\mathcal{G} \). In addition to selecting the explanation subgraph \( G_S \), GNNExplainer jointly learns a feature mask as well, modifying the \( \mathmat{X}_S \) term in the objective.
+
 \begin{itemize}
 	\item Overview of graph explainability
 		\begin{itemize}
 			\item Perturbation-based methods
 				\begin{itemize}
-					\item GNNExplainer
 					\item PGExplainer
 					\item SubgraphX
 				\end{itemize}
