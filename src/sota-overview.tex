@@ -1,7 +1,7 @@
 \chapter{Overview of the state of the art in graph learning and explainability}
 \label{chap:sota}
 
-\section{Machine Learning Tasks on Graphs}
+\section{Machine learning tasks on graphs}
 
 \todo{More general intro on graphs before GNNs}
 Graphs are a natural way of abstracting many mathematical problems and a versatile data structure used to represent relationships and interactions in various real-world domains such as chemistry, medicine, particle physics, social networks, medicine, fake-news detection, computer network security, autonomous vehicle guidance and others.\todo{Citations} Consequently, machine learning on graphs has, in recent years, seen an explosion in popularity, breadth and depth of both research and applications.
@@ -10,7 +10,7 @@ Let us denote a \name{graph} \( G = \left( V, E \right)) \in \mathcal{G} \) wher
 
 While in traditional machine learning, the range of tasks is usually fairly limited, there are four primary ways of applying machine learning algorithms to graph-structured data; node classification, link prediction, learning over the whole graph and community detection. All four of these tasks share some similarities and various machine learning methods on graphs may be applied to multiple tasks or may be adapted from one task to another. However, this is not a universal property with some methods being specific to one task, or even a particular subclass of that task.
 
-\subsection{Node Classification}
+\subsection{Node classification}
 
 Probably the most common task on graphs is that of \name{node classification}, an example of which can be seen in Figure~\ref{fig:node-classification}. In this scenario, a node label \( y_i \in \mathspace{Y} \) is considered for each node \( v_i \in V \). A subset of training nodes \( V_\mathrm{train} \) is typically used to learn a classification function \( f : \mathcal{G} \times V \to \mathspace{Y} \), that is a function taking a graph and one of its nodes and predicting the label of the given node. This function is then used to predict the class of the remaining nodes, using the information about the graph structure encoded in \( G \) and, optionally, the feature matrix \( \mathmat{X} \). \todo{Applications}
 
@@ -20,7 +20,7 @@ Probably the most common task on graphs is that of \name{node classification}, a
 	\label{fig:node-classification}
 \end{figure}
 
-\subsection{Link Prediction}
+\subsection{Link prediction}
 
 The second most common task is that of \name{link prediction}, an example of which is shown in Figure~\ref{fig:link-prediction}. Link prediction focuses on predicting the existence of edges between pairs of nodes in a graph. Given a graph with a set of existing nodes \( E \), the task is to identify potential future or missing edges. This can be framed as a binary classification problem where for each pair of nodes \( (u, v) \in E \), the goal is to predict the probability \( P((u, v) \in E) \). Link prediction is crucial in applications such as recommending friends in social networks, predicting interactions in biological networks, and inferring missing relationships in knowledge graphs.  \todo{References}
 
@@ -41,7 +41,7 @@ Graph classification involves assigning a label to an entire graph rather than i
 In the context of machine learning and statistical learning, the terms \name{inductive} and \name{transductive} learning have been used for a long time. In those general fields, the term inductive learning is used for algorithms that use specific training samples to produce general rules, which may then be applied to new samples in the future. In contrast with this stands transductive learning, which foregoes the idea of general rules, instead opting to reason from a set of training samples directly to another set of test samples (see \cite{vapnik_nature_1995}). In the context of graph learning, these two terms are used in a more specific and somewhat different fashion.
 
 
-\subsection{Inductive Graph Learning}
+\subsection{Inductive graph learning}
 
 Inductive graph learning refers to the scenario where the algorithm is trained on a subset of the data and is later evaluated on unseen data. Specifically, the algorithm receives a training set that consists of nodes, edges, labels, and optionally features, and learns a model based on this information. After training, the model is tested on a separate set of data that contains entirely independent nodes, edges, and possibly features, which were not seen during the training phase. When training and test sets are drawn from the same graph, this process is typically achieved by removing the test set from the graph before training. This allows the model to generalize from the training set to new, unseen parts of the graph.
 
@@ -51,7 +51,7 @@ Inductive graph learning refers to the scenario where the algorithm is trained o
 
 Inductive methods are more flexible and can handle dynamic and evolving graph structures, making them suitable for applications where the test set is expected to differ from the training set. They are essential for tasks like link prediction in evolving networks or node classification in dynamic environments.
 
-\subsection{Transductive Graph Learning}
+\subsection{Transductive graph learning}
 
 Transductive graph learning differs from inductive graph learning in that the algorithm has access to the entire graph, including all nodes, edges, and optionally features, during the training phase. However, the labels for a subset of nodes or edges, referred to as the test set, are withheld. This setting is common in tasks such as node classification and link prediction, where the goal is to infer the missing labels based on the observed graph structure. In transductive learning, the entire graph structure is available during training, but the model only needs to predict the missing labels for the test nodes or edges.
 
@@ -106,7 +106,7 @@ With the realization of the functions \( f_\theta \) and \( g_\theta \) as feedf
 	\label{fig:gori}
 \end{figure}
 
-\section{Random Walk-Based and Convolutional Models for Graph Machine Learning}
+\section{Random walk-based and convolutional models for graph machine learning}
 
 Graph machine learning models can be broadly categorized into two main types: random walk-based models and convolutional models.
 
@@ -116,7 +116,7 @@ Convolutional models, on the other hand, extend the concept of convolution from 
 
 Both types of models exploit the graph's topology in different ways to learn meaningful representations of nodes, edges, and the overall graph, allowing for effective predictions and analysis in a variety of applications.
 
-\subsection{Random Walk-Based Models}
+\subsection{Random walk-based models}
 
 Random walk-based models utilize random walks to explore the structure of a graph and understand the relationships between its nodes. A random walk is a process that starts at a given node and moves to a neighboring node at random, continuing this process for a specified number of steps. These walks effectively sample the graph, providing a means to understand the local and, to some extent, global structure of the graph without needing to process the entire graph at once. The following models are, however, all transductive and need to have the whole graph available during training. Due to this, the models can't generalize to samples which were not present during training, as those wouldn't be contained in any of the random walks.
 
@@ -187,7 +187,7 @@ This arrangement of weights is schematically visualized in Figure~\ref{fig:node2
 \end{figure}
 
 
-\subsection{Convolutional Models}
+\subsection{Convolutional models}
 
 Convolutional Graph Neural Networks have emerged as a powerful framework for learning on graph-structured data, bridging the gap between traditional graph theory and modern deep learning techniques. At the core of convolutional GNNs lies the Message Passing Neural Network (MPNN) paradigm (see \cite{gilmer_neural_2017}), which provides a flexible and effective mechanism for aggregating information from a node's local neighborhood. This paradigm is inspired by the concept of convolution in image processing, where information from neighboring pixels is combined to learn localized features. Similarly, in the graph domain, the MPNN paradigm allows for the propagation of information across nodes by iteratively exchanging and aggregating messages between neighboring nodes. This process enables the model to capture both local and global structural information within a graph, making it particularly well-suited for tasks such as node classification, graph classification, link prediction, and community detection. By leveraging the inherent relational structure of graphs, convolutional GNNs utilizing the MPNN paradigm have shown remarkable performance across a wide range of applications, from social network analysis to molecular biology, demonstrating their versatility and effectiveness in learning from complex, non-Euclidean data.
 
@@ -200,7 +200,7 @@ The formalisation of the message-passing paradigm is fairly straightforward and 
 \end{equation}
 Both the message function \( M_t \) and the node update function \( U_t \) (as well as an optional readout function converting \( \mathvec{h}_i^{(T)} \) to a final prediction) may be realized in various ways such as feedforward graph neural networks, eigenvectors of the graph Laplacian or non-parametric functions
 
-\subsubsection{Graph Convolutional Networks (GCNs)}
+\subsubsection{Graph convolutional networks (GCNs)}
 
 The main idea behind the method presented in the paper \cite{kipf_semi-supervised_2017} is to introduce a scalable and efficient approach for semi-supervised learning on graph-structured data using \name{Graph Convolutional Networks} (GCNs). The authors propose a convolutional architecture that is motivated by a first-order approximation of spectral graph convolutions, which allows their model to efficiently propagate information through the graph by aggregating feature information from a node's neighbors. This layer-wise propagation rule captures both local graph structure and node features, making it particularly well-suited for tasks where labels are only available for a small subset of nodes. The model scales linearly with the number of graph edges, making it computationally efficient and suitable for large-scale graph datasets.
 
@@ -272,7 +272,7 @@ In summary, GraphSAGE represents a significant advancement in the field of graph
 	\end{itemize}
 }
 
-\section{Explainability in Graph Learning}
+\section{Explainability in graph machine learning}
 
 In recent years, explainability has emerged as a crucial area of research, particularly in the context of machine learning models applied to graph-structured data. As these models become more complex and are deployed in critical applications -- ranging from social network analysis to biological network exploration and financial fraud detection -- the ability to interpret and understand their predictions is increasingly important. Explainability in graph models not only enhances trust and transparency but also facilitates debugging and improves model performance by identifying biases or errors in data. This section delves into various methodologies for explaining graph-based models, highlighting key techniques and tools that have been developed to interpret their outputs effectively. We will explore approaches that elucidate the decision-making processes of these models, ensuring their predictions are comprehensible and reliable to both experts and non-experts alike.
 
