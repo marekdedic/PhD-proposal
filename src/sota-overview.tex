@@ -272,31 +272,41 @@ In summary, GraphSAGE represents a significant advancement in the field of graph
 	\end{itemize}
 }
 
+\section{Explainability in Graph Learning}
+
+In recent years, explainability has emerged as a crucial area of research, particularly in the context of machine learning models applied to graph-structured data. As these models become more complex and are deployed in critical applications -- ranging from social network analysis to biological network exploration and financial fraud detection -- the ability to interpret and understand their predictions is increasingly important. Explainability in graph models not only enhances trust and transparency but also facilitates debugging and improves model performance by identifying biases or errors in data. This section delves into various methodologies for explaining graph-based models, highlighting key techniques and tools that have been developed to interpret their outputs effectively. We will explore approaches that elucidate the decision-making processes of these models, ensuring their predictions are comprehensible and reliable to both experts and non-experts alike.
+
+Over the recent years, a large number of graph explanation algorithms has been proposed. \cite{yuan_explainability_2022} propose a taxononomy of the various methods, which is shown in Figure~\ref{fig:graph-explainability-taxonomy}. The taxonomy arranges the methods into 2 main categories -- instance-level explanations and model-level explanations. Instance level explanations aim to explain the prediction of a particular instance (node, graph, etc.) on which the underlying graph algorithm was applied. These methods are further classified based on the method they use to obtain such explanations. In contrast, graph-level explanations aim to explain the inner workings of a graph model without respect to any individual example. In the rest of this section, several explanation methods are introduced.
+
+\begin{figure}
+	\includegraphics[width=\linewidth]{images/graph-explainability-taxonomy.pdf}
+	\caption{An overview of the taxonomy of graph explainability methods. Original figure from \cite{yuan_explainability_2022}.}
+	\label{fig:graph-explainability-taxonomy}
+\end{figure}
+
+\todo[inline]{Gradient-based instance-level methods -- Grad-CAM}
+
+\subsection{Surrogate methods}
+
+\cite{huang_graphlime_2023}
+
 \begin{itemize}
-	\item Explainability on graphs
+	\item Overview of graph explainability
 		\begin{itemize}
-			\item Overview of graph explainability
-			\item Instance-level post-hoc explainability
+			\item Surrogate methods
 				\begin{itemize}
-					\item Gradient-based methods
-						\begin{itemize}
-							\item Grad-CAM
-						\end{itemize}
-					\item Surrogate methods
-						\begin{itemize}
-							\item GraphLime
-						\end{itemize}
-					\item Perturbation-based methods
-						\begin{itemize}
-							\item GNNExplainer
-							\item PGExplainer
-							\item SubgraphX
-						\end{itemize}
+					\item GraphLime
 				\end{itemize}
-			\item Model-level explainability
+			\item Perturbation-based methods
 				\begin{itemize}
-					\item XGNN
-					\item GraphChef?
+					\item GNNExplainer
+					\item PGExplainer
+					\item SubgraphX
 				\end{itemize}
+		\end{itemize}
+	\item Model-level explainability
+		\begin{itemize}
+			\item XGNN
+			\item GraphChef?
 		\end{itemize}
 \end{itemize}
