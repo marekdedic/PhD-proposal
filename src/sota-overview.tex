@@ -215,6 +215,36 @@ Computing this objective function, however, quickly becomes unfeasible. Instead,
 	\label{fig:skip-gram}
 \end{figure}
 
-The algorithm realizes the embedding \( \Phi \) as a matrix of individual node embeddings that is randomly initialized and optimized iteratively over all of the random walks. This optimization is realized as a gradient descent with the objective function being the negative log likelihood of the objective introduced in Equation~\ref{deepwalk-objective}. Further computational optimizations are needed such as a hierarchical softmax algorithm for efficient computation of the node occurence probabilities, however, further details are outside the scope of this work.
+The algorithm realizes the embedding \( \Phi \) as a matrix of individual node embeddings that is randomly initialized and optimized iteratively over all of the random walks. This optimization is realized as a gradient descent with the objective function being the negative log likelihood of the objective introduced in Equation~\ref{eq:deepwalk-objective}. Further computational optimizations are needed such as a hierarchical softmax algorithm for efficient computation of the node occurence probabilities, however, further details are outside the scope of this work.
 
 \subsubsection{Node2Vec}
+
+\name{Node2vec} is an algorithm designed to learn continuous feature representations of nodes in a graph by optimizing a neighborhood preserving objective. Unlike previous graph embedding techniques such as DeepWalk that often focus solely on structural equivalence, node2vec introduces a flexible notion of a node's neighborhood, allowing it to capture both the homophily and structural equivalence properties of nodes. It achieves this through a biased random walk strategy that balances breadth-first and depth-first graph traversal, thereby capturing diverse patterns in the data. This flexibility enables node2vec to generate representations that are well-suited for various downstream machine learning tasks.
+
+The node2vec algorithm differs from DeepWalk mainly in the way random walks are sampled from the graph, the following extraction of node embeddings is largely the same. Where DeepWalk generated random walks by uniformly sampling among the last node's neighbours in each step, node2vec considers a node's neighbourhood \( \mathrm{ne}_S [ v_i ] \) as the primary area of interest, with varying neigbourhood sampling strategies S. To this end, node2vec seeks to maximize the following objective:
+\begin{equation}\label{eq:node2vec-objective}
+	\sum_{v_i \in V} P \left( \mathrm{ne}_S[v_i] \middle| \Phi \left( v_i \right) \right)
+\end{equation}
+This objective is simplified further by assuming conditional independence between the likelihoods of observing different neighbouring nodes, i.e.
+\begin{equation}
+	P \left( \mathrm{ne}_S[v_i] \middle| \Phi \left( v_i \right) \right) = \prod_{v_j \in \mathrm{ne}_S[v_i]} P \left( v_j \middle| \Phi \left( v_i \right) \right)
+\end{equation}
+The choice of the neigbourhood sampling strategy \( S \) is central to node2vec, with the two most extreme options being \name{breadth-first search} (BFS), where \( \mathrm{ne}_S [ v_i ] \) is restricted to immeadiate neighbours of \( v_i \), and \name{depth-first search} (DFS), where nodes are sampled at ever increasing distances from \( v_i \)
+
+Graph representation learning algorithms frequently consider two different kind of node similarities, homophily and structural equivalence. When considering homophily, nodes of the same kind are often connected and relatively close together in the graph, which an embedding obtained with BFS would be able to capture. On the other hand, under structural equivalence, two nodes of the same kind may play the same role withing their respective local neighbourhoods, without necessarily being close to one another. An embedding obtained by DFS would be a good representation for such a case. The node2vec random walk generation algorithm is capable of interpolating between BFS and DFS, therefore being suitable for graphs mainly governed by homophily as well as graphs which are better described by structural equivalence.
+
+In order to be able to interpolate between BFS and DFS, the node2vec algorithm considers 2 parameters, \( p \) and \( q \), that control how the random walk is generated. Consider a scenario where the random walk just traversed the edge \( \left( t, v \right) \) and now decides where to continue from the node \( v \). In DeepWalk, the neighbours of \( v_i \) have the same probability \( \frac{1}{\left\lvert \mathrm{ne}[v] \right\rvert} \) of being the next node. With node2vec, this probability is multiplied by a weight \( \alpha_{pq} \left( t, x \right) \) for each candidate node \( x \). This weight is defined as
+\begin{equation}\label{node2vec-weight}
+	\alpha_{pq} \left( t, x \right) = \begin{cases}
+		\frac{1}{p} & \text{for}\ x = t \\
+		1 & \text{for}\ x \in \mathrm{ne}[t] \\
+		\frac{1}{q} & \text{otherwise.}
+	\end{cases}
+\end{equation}
+This arrangement of weights is schematically visualized in Figure~\ref{fig:node2vec-weights}. By choosing the values of \( p \) and \( q \), this method can easily interpolate between BFS and DFS, for example, by choosing a very high value of \( q \), the random walks are restricted to almost never leave the local neighborhood. DeepWalk can be seen as a special case of node2vec with \( p = q = 1 \).
+
+\begin{figure}
+	\includegraphics[width=0.6\linewidth]{images/node2vec-weights.pdf}
+	\caption{An example of the weights assigned to different nodes in a node2vec random walk. The random walk just traversed from \( t \) to \( v \) and the nodes \( t, x_1, x_2 \) and \( x_3 \) are considered as the next node in the random walk. Original figure from \cite{grover_node2vec_2016}.}
+	\label{fig:node2vec-weights}
+\end{figure}
