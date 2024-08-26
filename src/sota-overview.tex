@@ -69,7 +69,7 @@
 \todo{More general intro on graphs before GNNs}
 Graphs are a natural way of abstracting many mathematical problems and a versatile data structure used to represent relationships and interactions in various real-world domains such as chemistry, medicine, particle physics, social networks, medicine, fake-news detection, computer network security, autonomous vehicle guidance and others.\todo{Citations} Consequently, machine learning on graphs has, in recent years, seen an explosion in popularity, breadth and depth of both research and applications.
 
-Let us denote a \name{graph} \( G = \left( V, E \right)) \in \mathcal{G} \) where \( V \) is a set of the graph \name{nodes} and \( E \subseteq V^2 \) is a set of \name{edges} connecting the nodes. The questions of whether the edges should be directed, whether to allow self-loops and/or multiple edges between the same pair of nodes is in general not answered. Most of the discussed methods are agnostic to these choices, which are thus left to the user. Optionally, a vector of \name{node features} \( \mathvec{x}_i \in \mathspace{X} \) may be considered for each node \( v_i \in V \). Additionally, these feature vectors are often considered to form a \name{feature matrix} \( \mathmat{X} \in \mathfield{R}^{\left\lvert V \right\rvert \times \left\lvert \mathspace{X} \right\rvert} \) and this feature matrix is then considered to a part of the graph \( G \). \todo{More definitions}
+Let us denote a \name{graph} \( G = \left( V, E \right)) \in \mathcal{G} \) where \( V \) is a set of the graph \name{nodes} and \( E \subseteq V^2 \) is a set of \name{edges} connecting the nodes. The questions of whether the edges should be directed, whether to allow self-loops and/or multiple edges between the same pair of nodes is in general not answered. Most of the discussed methods are agnostic to these choices, which are thus left to the user. Optionally, a vector of \name{node features} \( \mathvec{x}_i \in \mathspace{X} \) may be considered for each node \( v_i \in V \). Additionally, these feature vectors are often considered to form a \name{feature matrix} \( \mathmat{X} \in \mathfield{R}^{\left\lvert V \right\rvert \times \left\lvert \mathspace{X} \right\rvert} \) and this feature matrix is then considered to a part of the graph \( G \). In rare cases, a vector of \name{edge features} \( \mathvec{x}_{ij} \in \mathspace{X} \) is considered as well for all edges \( \left( v_i, v_j \right) \in E \). \todo{More definitions}
 
 While in traditional machine learning, the range of tasks is usually fairly limited, there are four primary ways of applying machine learning algorithms to graph-structured data; node classification, link prediction, learning over the whole graph and community detection. All four of these tasks share some similarities and various machine learning methods on graphs may be applied to multiple tasks or may be adapted from one task to another. However, this is not a universal property with some methods being specific to one task, or even a particular subclass of that task.
 
@@ -124,7 +124,7 @@ Transductive graph learning differs from inductive graph learning in that the al
 
 Transductive methods typically perform well when the test set is not significantly different from the training set, as they can exploit global graph properties and dependencies. However, they usually do not generalize well to new, unseen graphs or nodes.
 
-\section{The graph neural network}
+\section{The graph neural network}\label{sec:gori}
 
 The original \name{Graph Neural Network} (GNN) was first introduced by \cite{gori_new_2005}. While major interest in machine learning on graphs only materialised 10 years later, it is nonetheless this paper that lays the ground work for the entire field. The paper presents a new neural network model called Graph Neural Networks (GNNs), designed to directly process graphs. GNNs extend recurrent neural networks (RNNs) to handle both graph-focused and node-focused applications. The method is based on associating a hidden state vector \( \mathvec{h}_i \in \mathfield{R}^k \) with each node \( v_i \) in the graph, which is updated dynamically according to the node's neighborhood. The update is governed by a parametric transition function \( f_\theta \), which considers the node's label and the states and labels of its neighbors.
 
@@ -248,3 +248,50 @@ This arrangement of weights is schematically visualized in Figure~\ref{fig:node2
 	\caption{An example of the weights assigned to different nodes in a node2vec random walk. The random walk just traversed from \( t \) to \( v \) and the nodes \( t, x_1, x_2 \) and \( x_3 \) are considered as the next node in the random walk. Original figure from \cite{grover_node2vec_2016}.}
 	\label{fig:node2vec-weights}
 \end{figure}
+
+
+\subsection{Convolutional Models}
+
+Convolutional Graph Neural Networks have emerged as a powerful framework for learning on graph-structured data, bridging the gap between traditional graph theory and modern deep learning techniques. At the core of convolutional GNNs lies the Message Passing Neural Network (MPNN) paradigm (see \cite{gilmer_neural_2017}), which provides a flexible and effective mechanism for aggregating information from a node's local neighbourhood. This paradigm is inspired by the concept of convolution in image processing, where information from neighbouring pixels is combined to learn localized features. Similarly, in the graph domain, the MPNN paradigm allows for the propagation of information across nodes by iteratively exchanging and aggregating messages between neighboring nodes. This process enables the model to capture both local and global structural information within a graph, making it particularly well-suited for tasks such as node classification, graph classification, link prediction, and community detection. By leveraging the inherent relational structure of graphs, convolutional GNNs utilizing the MPNN paradigm have shown remarkable performance across a wide range of applications, from social network analysis to molecular biology, demonstrating their versatility and effectiveness in learning from complex, non-Euclidean data.
+
+The formalisation of the message-passing paradigm is fairly straightforward and in some sense similar to the original GNN as described in Section~\ref{sec:gori}. The message passing process runs for \( T \) time steps and is defined with a message function \( M_t \) and a node update function \( U_t \). A hidden state vector \( \mathvec{h}_i^{(t)} \) is assigned to each node \( v_i \) and updated based on messages \( \mathvec{m}_i^{(t+1)} \) according to
+\begin{equation}\label{eq:message-passing}
+	\begin{split}
+		\mathvec{m}_i^{(t+1)} &= \sum_{v_j \in \mathrm{ne}[v_i]} M_t \left( \mathvec{h}_i^{(t)}, \mathvec{h}_j^{(t)}, \mathvec{x}_{ij} \right) \\
+		\mathvec{h}_i^{(t+1)} &= U_t \left( \mathvec{h}_i^{(t)}, \mathvec{m}_i^{(t+1)} \right). \\
+	\end{split}
+\end{equation}
+Both the message function \( M_t \) and the node update function \( U_t \) (as well as an optional readout function converting \( \mathvec{h}_i^{(T)} \) to a final prediction) may be realized in various ways such as feedforward graph neural networks, eigenvectors of the graph Laplacian or non-parametric functions
+
+\subsubsection{Graph Convolutional Networks (GCNs)}
+
+The main idea behind the method presented in the paper \cite{kipf_semi-supervised_2017} is to introduce a scalable and efficient approach for semi-supervised learning on graph-structured data using \name{Graph Convolutional Networks} (GCNs). The authors propose a convolutional architecture that is motivated by a first-order approximation of spectral graph convolutions, which allows their model to efficiently propagate information through the graph by aggregating feature information from a node's neighbors. This layer-wise propagation rule captures both local graph structure and node features, making it particularly well-suited for tasks where labels are only available for a small subset of nodes. The model scales linearly with the number of graph edges, making it computationally efficient and suitable for large-scale graph datasets.
+
+\begin{figure}
+	\includegraphics[width=0.8\linewidth]{images/GCN.pdf}
+	\caption{Schematic representation of a GCN network learning on a graph with \( C \) input channels and \( F \) output channels. Original figure from \cite{kipf_semi-supervised_2017}.}
+	\label{fig:GCN}
+\end{figure}
+
+The algorithm for a GCN (schematically represented in Figure~\ref{fig:GCN}) presumes a hidden state matrix \( \mathmat{H}^{(l)} \in \mathfield{R}^{\left\lvert V \right\rvert \times k} \) at layer \( l \) for the whole graph (effectively assigning a \( k \)-dimensional state vector to each node), initialized with the node features of the graph, i.e. \( \mathmat{H}^{(0)} = \mathmat{X} \). The construction of a GCN update step may be viewed as an extension of an ordinary feedforwaard neural network, which would feature a layer update step
+\begin{equation}
+	\mathmat{H}^{(l+1)} = \sigma \left( \mathmat{H}^{(l)} \mathmat{W}^{(l)} \right)
+\end{equation}
+where \( \sigma \) is an activation function such as ReLU and \( \mathmat{W}^{(l)} \) are the trainable weights of the \( l \)-th layer. While this structure could theoretically work for a graph dataset, it doesn't actually utilize any of the graph structure. The key insight in GCN is that this may be ameliorated with an addition of the graph adjacency matrix \( \mathmat{A} \) to the update step:
+\begin{equation}
+	\mathmat{H}^{(l+1)} = \sigma \left( \mathmat{A} \mathmat{H}^{(l)} \mathmat{W}^{(l)} \right).
+\end{equation}
+This update step, however, does not propagate information contained in a node to the same node in the next layer as the diagonal elements of \( \mathmat{A} \) are zero unless there is a self-loop in that particular node. The authors of GCN propose to improve the update step by replacing the adjacency matrix with the matrix \( \tilde{\mathmat{A}} = \mathmat{A} + \mathmat{I} \), effectively making the model behave as if there were self-loops in each node of the graph. Furthermore, the authors propose to fix one final issue with the method, which is the different magnitude of outputs of each layer depending on the density of edges in the graph. To this end, the pseudo-adjacency matrix \( \tilde{\mathmat{A}} \) needs to be normalized using the diagonal node degree matrix \( \tilde{\mathmat{D}} \) defined as \( \tilde{\mathmat{D}}_{ii} = \sum_j \tilde{\mathmat{A}}_{ij} \). The normalization is carried out in a symmetric fashion, yielding the final update rule
+\begin{equation}\label{eq:GCN}
+	\mathmat{H}^{(l+1)} = \sigma \left( \tilde{\mathmat{D}}^{-\frac{1}{2}} \tilde{\mathmat{A}} \tilde{\mathmat{D}}^{-\frac{1}{2}} \mathmat{H}^{(l)} \mathmat{W}^{(l)} \right).
+\end{equation}
+The choices behind the specific modifications of the simple update rule are further theoretically motivated in \cite{kipf_semi-supervised_2017}. The update rule corresponds to a message passing rule defined by
+\begin{equation}
+	\begin{split}
+		M_t \left( \mathvec{h}_i^{(t)}, \mathvec{h}_j^{(t)} \right) &= \left( \mathdeg \left( v_i \right) \mathdeg \left( v_j \right) \right)^{-\frac{1}{2}} \tilde{\mathmat{A}}_{ij} \mathvec{h}_j^{(t)} \\
+		U_t \left( \mathvec{h}_i^{(t)}, \mathvec{m}_i^{(t+1)} \right) &= \sigma \left( \mathmat{W}^{(t)} \mathvec{m}_i^{(t+1)} \right). \\
+	\end{split}
+\end{equation}
+Seeing as each layer of GCN aggregates to each node messages from its 1-hop neighbourhood, the amount to which the algorithm is concerned with the local neigbourhood of each node versus the global structure of the graph can be controlled by the number of GCN layers. To achieve sufficient representational power, the GCN layers are frequently used in conjunction with subsequent feedforward layers that further process the information aggregated by the convolutional part in each node independently.
+
+\subsubsection{GraphSAGE}

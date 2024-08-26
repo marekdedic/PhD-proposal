@@ -11,9 +11,11 @@
 	\( v_i \in V \) & A node \\
 	\( \mathspace{X} \) & A feature space \\
 	\( \mathvec{x}_i \in \mathspace{X} \) & A vector of features of \( v_i \) \\
-	\( \mathmat{X} \in \mathfield{R}^{\left\lvert V \right\rvert \times \left\lvert \mathspace{X} \right\rvert} \) & A graph feature matrix	\\
+	\( \mathmat{X} \in \mathfield{R}^{\left\lvert V \right\rvert \times \left\lvert \mathspace{X} \right\rvert} \) & A graph node feature matrix	\\
+	\( \mathvec{x}_ij \in \mathspace{X} \) & A vector of features of \( \left( v_i, v_j \right) \) \\
 	\( \mathspace{Y} \) & A classification label space \\
 	\( G \left[ T \right] \) & A subgraph of \( G \) induced by the set \( T \in V \) \\
 	\( \mathrm{ne}[v_i] \) & The set of neighbours of \( v_i \), that is \( \mathrm{ne}[v_i] = \left\{ v_j \in V \middle| \left( v_i, v_j \right) \in E \right\} \) \\
+	\( \deg \left( v_i \right) \) & The degree of node \( v_i \), that is \( \deg \left( v_i \right) = \left\lvert \mathrm{ne}[v_i] \right\rvert \) \\
 	\bottomrule
 \end{tabular}
