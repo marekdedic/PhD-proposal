@@ -308,7 +308,7 @@ Perturbation-based methods are commonly used to explain deep image models. As th
 
 \subsubsection{GNNExplainer}
 
-GNNExplainer was introduced by \cite{ying_gnnexplainer_2019} as a pioneering method designed to provide interpretable explanations for the predictions made by GNNs. Unlike some other explanation techniques that might be tailored to specific models or limited by architecture, GNNExplainer is a model-agnostic approach, capable of explaining any GNN on any graph-based task. It achieves this by identifying both the most crucial node features as well as the most informative subgraph structures that influence a GNN's decision, thereby providing a clear and concise explanation that enhances model transparency and understanding.
+GNNExplainer was introduced by \cite{ying_gnnexplainer_2019} as a pioneering method designed to provide interpretable explanations for the predictions made by GNNs. Unlike some other explanation techniques that might be tailored to specific models or limited by architecture, GNNExplainer is a model-agnostic approach, capable of explaining any GNN on any graph-based task. It achieves this by identifying both the most crucial node features as well as the most informative subgraph structures that influence a GNN's decision, thereby providing a clear and concise explanation that enhances model transparency and understanding. GNNExplainer is probably the most commonly used algorithm for generating instance-level graph explanations, despite newer algorithms diminishing its dominance in this application.
 
 For a given node \( v_i \), whose prediction is to be explained, GNNExplainer first limits the search to \( G_C \subseteq G \), the computational graph of the prediction of this particular node. The goal of the method is then to identify a subgraph \( G_S \subseteq G_C \) and a feature subset \( \mathmat{X}_S = \left\{ \mathvec{x}_i \middle| v_i \in G_S \right\} \) that explain the prediction for the given node. GNNExplainer is then formulated as the following mutual information maximization framework:
 \begin{equation}\label{eq:GNNExplainer}
@@ -316,7 +316,7 @@ For a given node \( v_i \), whose prediction is to be explained, GNNExplainer fi
 \end{equation}
 where \( \mathrm{MI} \) denotes mutual information, \( \mathrm{H} \) denotes entropy, and \( Y \) is defined as a random variable indicating the probability of nodes belonging to each class. Seeing as the first term on the right-hand side of Equation~\ref{eq:GNNExplainer} is independent of the explanation, the maximization of the mutual information is equivalent to the minimizatation of the last entropy term \( \mathrm{H} \left( Y \middle| G = G_S, \mathmat{X} = \mathmat{X}_S \right) \). Direct optimization of this objective is nonetheless still not tractable given the exponential number of candidate subgraphs. To sidestep this issue, a fractional adjacency matrix \( A_S \in \left[ 0 \right]^{n \times n} \) is considered, enabling us to interpret \( G_S \sim \mathcal{G} \) as a random graph variable. With that, the objective from Equation~\ref{eq:GNNExplainer} is simplified to
 \begin{equation}
-	\min_{\mathcal{G}} \mathbb{E}_{G_S \sim \mathcal{G}} \mathrm{H} \left( Y \middle| G = G_S, \mathmat{X} = \mathmat{X}_S \right).
+	\min_{\mathcal{G}} \mathbb{E}_{G_S \sim \mathcal{G}} \left[ \mathrm{H} \left( Y \middle| G = G_S, \mathmat{X} = \mathmat{X}_S \right) \right].
 \end{equation}
 Assuming convexity, this objective may be further simplified using Jensen's inequality to obtain the following upper bound:
 \begin{equation}
@@ -324,18 +324,18 @@ Assuming convexity, this objective may be further simplified using Jensen's ineq
 \end{equation}
 The convexity assumption doesn't actually hold for neural networks, however, thanks to empirical correctness of the results, the upper bound is used despite this fact. Further optimizations can be found in \cite{ying_gnnexplainer_2019}, however, with this objective, \( \mathcal{G} \) may be decomposed into a multivariate Bernoulli distribution and mean-field variational approximation can then be used to tractably estimate \( \mathbb{E}_\mathcal{G} \). In addition to selecting the explanation subgraph \( G_S \), GNNExplainer jointly learns a feature mask as well, modifying the \( \mathmat{X}_S \) term in the objective.
 
-\begin{itemize}
-	\item Overview of graph explainability
-		\begin{itemize}
-			\item Perturbation-based methods
-				\begin{itemize}
-					\item PGExplainer
-					\item SubgraphX
-				\end{itemize}
-		\end{itemize}
-	\item Model-level explainability
-		\begin{itemize}
-			\item XGNN
-			\item GraphChef?
-		\end{itemize}
-\end{itemize}
+\subsubsection{PGExplainer}
+
+The PGExplainer method by \cite{luo_parameterized_2020} the challenge of explaining predictions made by Graph Neural Networks without relying on generating explanations from scratch for each individual node. The existing methods, like GNNExplainer, primarily provide localized explanations for individual instances (e.g., a node or a graph), which are not generalizable and lack efficiency when applied in scenarios requiring explanations for multiple instances. In contrast to GNNExplainer, PGExplainer is only concerned with the structure of the graph, not producting any feature mask.
+
+PGExplainer optimizes the same objective from Equation~\ref{eq:GNNExplainer} as GNNExplainer. Unlike GNNExplainer, PGExplainer solves the issue of intractability by assuming that \( G_S \) is a Gilbert random graph (see \cite{gilbert_random_1959}), where selection of edges from \( G \) is conditionally independent between different edges. Let \( e_{ij} \in V^2 \) be a random variable indicating whether an edge is selected, \( G_S \) a random graph variable and \( \Theta \) be a probabilistic adajcency matrix defined as \( \Theta_{ij} = \mathrm{P} \left( e_{ij} = 1 \right) \). Based on the above assumption, the probabilityof a graph \( G_S \) can be factorized as
+\begin{equation}
+	\mathrm{P} \left( G_S \right) = \prod_{\left( v_i, v_j \right) \in E} \mathrm{P} \left( e_{ij} \right).
+\end{equation}
+\( e_{ij} \) is then modeled with a Bernoulli distribution, allowing us to rewrite the PGExplainer objective as
+\begin{equation}
+	\min_{G_S} \mathbb{E}_{G_S} \left[ \mathrm{H} \left( Y \middle| G = G_S \right) \right] \approx \min_{\Theta} \mathbb{E}_{G_S \sim q \left( \Theta \right)} \left[ \mathrm{H} \left( Y \middle| G = G_S \right) \right]
+\end{equation}
+where \( q \left( \Theta \right) \) is the distribution of the explanatory graph parameterized by \( \Theta \). Further optimizations are described in \cite{luo_parameterized_2020}.
+
+\todo[inline]{If there is time: Model-level explanations, GraphChef}
