@@ -17,17 +17,49 @@
 	langid = {english},
 }
 
+@misc{pevny_nested_2020,
+	title = {Nested Multiple Instance Learning in Modelling of {HTTP} network traffic},
+	rights = {All rights reserved},
+	url = {http://arxiv.org/abs/2002.04059},
+	doi = {10.48550/arXiv.2002.04059},
+	abstract = {In many interesting cases, the application of machine learning is hindered by data having a complicated structure stimulated by a structured file-formats like {JSONs}, {XMLs}, or {ProtoBuffers}, which is non-trivial to convert to a vector / matrix. Moreover, since the structure frequently carries a semantic meaning, reflecting it in the machine learning model should improve the accuracy but more importantly it facilitates the explanation of decisions and the model. This paper demonstrates on the identification of infected computers in the computer network from their {HTTP} traffic, how to achieve this reflection using recent progress in multiple-instance learning. The proposed model is compared to complementary approaches from the prior art, the first relying on human-designed features and the second on automatically learned features through convolution neural networks. In a challenging scenario measuring accuracy only on unseen domains/malware families, the proposed model is superior to the prior art while providing a valuable feedback to the security researchers. We believe that the proposed framework will found applications elsewhere even beyond the field of security.},
+	number = {{arXiv}:2002.04059},
+	publisher = {{arXiv}},
+	author = {Pevny, Tomas and Dedic, Marek},
+	urldate = {2023-10-11},
+	date = {2020-02-10},
+	eprinttype = {arxiv},
+	eprint = {2002.04059 [cs]},
+	keywords = {Computer Science - Cryptography and Security},
+}
+
 @inproceedings{dedic_balancing_2023,
 	location = {Torino, Italy},
 	title = {Balancing performance and complexity with adaptive graph coarsening},
 	rights = {All rights reserved},
-	url = {https://mlg-europe.github.io/papers/234.pdf},
+	url = {https://mlg-europe.github.io/2023/papers/234.pdf},
 	abstract = {Abstract Graph based models are used for tasks with increasing size and computational demands. We present a method for node classification that allows a user to precisely select the resolution at which the graph in question should be pretrained. Our method builds on an existing algorithm for pretraining on coarser graphs, {HARP}, which we extend in order to tune the effect of graph coarsening on the accuracy of node classification on a fine level. We present a novel way of refining the reduced graph in a targeted way based on the node classification confidence of particular nodes. This enhancement provides sufficient detail where needed, while collapsing structures where per-node information is not necessary for sufficient node classification accuracy. Hence, the method provides a meta-model for enhancing graph embedding models such as node2vec. We apply it to several datasets and discuss the differing behaviour on each of them in the context of their properties.},
 	eventtitle = {20th International Workshop on Mining and Learning with Graphs},
+	booktitle = {20th International Workshop on Mining and Learning with Graphs @{ECMLPKDD} 2023},
 	author = {Dědič, Marek and Bajer, Lukáš and Procházka, Pavel and Holeňa, Martin},
 	urldate = {2023-09-22},
 	date = {2023-09-22},
 	langid = {english},
+}
+
+@inproceedings{dedic_loss_2020,
+	location = {Oravská Lesná, Slovakia},
+	title = {Loss Functions for Clustering in Multi-instance Learning},
+	volume = {2718},
+	url = {http://ceur-ws.org/Vol-2718/#paper05},
+	abstract = {Multi-instance learning belongs to one of recently fast developing areas of machine learning. It is a supervised learning method and this paper reports research into its unsupervised counterpart, multi-instance clustering. Whereas traditional clustering clusters points, multi-instance clustering clusters bags, i.e. multisets of points or of other kinds of objects. The paper focuses on the problem of loss functions for clustering. Three sophisticated loss functions used for clustering of points, contrastive predictive coding, triplet loss and magnet loss, are elaborated for multi-instance clustering. Finally, they are compared on 18 benchmark datasets, as well as on a real-world dataset.},
+	eventtitle = {Information Technologies - Applications and Theory ({ITAT} 2020)},
+	pages = {137--146},
+	booktitle = {Proceedings of the 20th Conference Information Technologies - Applications and Theory ({ITAT} 2020)},
+	publisher = {{CEUR}-{WS}.org},
+	author = {Dědič, Marek and Pevný, Tomáš and Bajer, Lukáš and Holeňa, Martin},
+	date = {2020-10-30},
+	file = {Full Text:/home/madedic/Zotero/storage/UV9IPN8W/Dědič et al. - Loss Functions for Clustering in Multi-instance Le.pdf:application/pdf},
 }
 
 @article{yuan_explainability_2022,
@@ -58,6 +90,20 @@ We formulate {GNNExplainer} as an optimization task that maximizes the mutual in
 	author = {Ying, Zhitao and Bourgeois, Dylan and You, Jiaxuan and Zitnik, Marinka and Leskovec, Jure},
 	urldate = {2023-08-30},
 	date = {2019},
+}
+
+@inproceedings{dedic_adaptive_2022,
+	location = {Grenoble, France},
+	title = {Adaptive graph coarsening in the context of local graph quality},
+	rights = {All rights reserved},
+	url = {https://graphquality.github.io/rsc/art1.pdf},
+	abstract = {Graph based models are used for tasks with increasing size and computational demands. We present a method for studying graph properties from the point of view of a downstream task. More precisely, the method allows a user to precisely select the resolution at which the graph in question should be coarsened. Our method builds on an existing algorithm for pretraining on coarser graphs, {HARP}. We extend both main parts of the algorithm in order to observe the effect of graph coarsening to model quality on a fine level. We present a general framework for graph coarsenings, providing two alternative algorithms based on graph diffusion convolution and evolutionary algorithms. Additionally, we present a novel way for un-coarsening the reduced graph in a targeted way based on the confidence of downstream classification for particular nodes. Together, these enhancements provide sufficient detail where needed, while collapsing structures where per-node information is not necessary for high model performance. Our method is a general meta-model for enhancing graph embedding models such as node2vec. We apply the method to several datasets and discuss the differing behaviour on each of them. Furthermore, we compare the proposed coarsening schemas.},
+	eventtitle = {Data and Model Quality for Mining and Learning with Graphs: Methods and Open Challenges @{ECML}-{PKDD} 2022},
+	booktitle = {Data and Model Quality for Mining and Learning with Graphs: Methods and Open Challenges @{ECML}-{PKDD} 2022},
+	author = {Dědič, Marek and Bajer, Lukáš and Repický, Jakub and Procházka, Pavel and Holeňa, Martin},
+	urldate = {2022-09-23},
+	date = {2022-09-23},
+	langid = {english},
 }
 
 @inproceedings{prochazka_scalable_2022,
@@ -109,6 +155,26 @@ We formulate {GNNExplainer} as an optimization task that maximizes the mutual in
 	author = {Kipf, Thomas N. and Welling, Max},
 	date = {2017-04-24},
 	langid = {english},
+}
+
+@inproceedings{borisov_experimental_2021,
+	location = {Heľpa, Slovakia},
+	title = {Experimental Investigation of Neural and Weisfeiler-Lehman-Kernel Graph Representations for Downstream Classification},
+	volume = {2962},
+	rights = {All rights reserved},
+	url = {http://ceur-ws.org/Vol-2962/#paper50},
+	series = {{CEUR} Workshop Proceedings},
+	abstract = {Graphs are one of the most ubiquitous kinds of data. However, data analysis methods have been developed primarily for numerical data, and to make use of them, graphs need to be represented as elements of some Euclidean space. An increasingly popular way of representing them in this way are graph neural networks ({GNNs}). Because data analysis applications typically require identical results for isomorphic graphs, the representations learned by {GNNs} also need to be invariant with respect to graph isomorphism. That motivated recent research into the possibilities of recognizing nonisomorphic pairs of graphs by {GNNs}, primarily based on the Weisfeiler-Lehman ({WL}) isomorphism test. This paper reports the results of a first experimental comparison of four variants of two important {GNNs} based on the {WL} test from the point of view of graph representation for downstream classification by means of a support vector machins ({SVM}). Those methods are compared not only with each other, but also with a recent generalization of the {WL} subtree kernel. For all {GNN} variants, two different representations are included in the comparison. The comparison revealed that the four considered representations of the same kind of {GNN} never significantly differ. On the other hand, there was always a statistically significant difference between representations originating from different kinds of {GNNs}, as well as between any representation originating from any of the considered {GNNs} and the representation originating from the generalized {WL} kernel.},
+	eventtitle = {Information Technologies – Applications and Theory 2021},
+	pages = {130--139},
+	booktitle = {Proceedings of the 21st Conference Information Technologies – Applications and Theory ({ITAT} 2021)},
+	publisher = {{CEUR}-{WS}.org},
+	author = {Borisov, Sergej and Dědič, Marek and Holeňa, Martin},
+	urldate = {2021-10-07},
+	date = {2021-10-02},
+	langid = {english},
+	note = {{ISSN}: 1613-0073},
+	file = {Full Text PDF:/home/madedic/Zotero/storage/Z5KJKGR4/Borisov et al. - 2021 - Experimental Investigation of Neural and Weisfeile.pdf:application/pdf},
 }
 
 @inproceedings{hamilton_inductive_2017,
@@ -185,6 +251,18 @@ We formulate {GNNExplainer} as an optimization task that maximizes the mutual in
 	author = {Dědič, Marek and Bajer, Lukas and Prochazka, Pavel and Holena, Martin},
 	urldate = {2024-04-18},
 	date = {2024-05-11},
+	langid = {english},
+}
+
+@inproceedings{prochazka_convolutional_2024,
+	location = {Vilnius, Lithuania},
+	title = {Convolutional Signal Propagation: A Simple Scalable Algorithm for Hypergraphs},
+	rights = {All rights reserved},
+	abstract = {Last decade has seen the emergence of numerous methods for learning on graphs, particularly Graph Neural Networks ({GNNs}). These methods, however, are often not directly applicable to more complex structures like bipartite graphs (equivalent to hypergraphs), which represent interactions among two entity types (e.g. a user liking a movie). This paper proposes Convolutional Signal Propagation ({CSP}), a non-parametric simple and scalable method that natively operates on bipartite graphs (hypergraphs) and can be implemented with just a few lines of code. After defining {CSP}, we demonstrate its relationship with well-established methods like label propagation, Naive Bayes, and Hypergraph Convolutional Networks. We evaluate {CSP} against several reference methods on real-world datasets from multiple domains, focusing on retrieval and classification tasks. Our results show that {CSP} offers competitive performance while maintaining low computational complexity, making it an ideal first choice as a baseline for hypergraph node classification and retrieval. Moreover, despite operating on hypergraphs, {CSP} achieves good results in tasks typically not associated with hypergraphs, such as natural language processing.},
+	eventtitle = {21st International Workshop on Mining and Learning with Graphs},
+	booktitle = {21st International Workshop on Mining and Learning with Graphs @{ECMLPKDD} 2024},
+	author = {Procházka, Pavel and Dědič, Marek and Bajer, Lukáš},
+	date = {2024-09-09},
 	langid = {english},
 }
 
