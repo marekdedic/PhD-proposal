@@ -6,6 +6,7 @@ In this chapter, we introduce our contributions to graph learning. The main cont
 \todo[inline]{Chapter outline}
 
 \section{The performance-complexity trade-off in graph machine learning}
+\label{sec:performance-complexity}
 
 One of the key ares of study in our work has been the interplay between graph complexity and the performance of a model used on the graph in question, outlined in \cite{prochazka_scalable_2022, dedic_balancing_2023, dedic_balancing_2024}
 
@@ -52,6 +53,7 @@ In \cite{dedic_balancing_2024}, we experimentally evaluated this method on 10 of
 \end{figure}
 
 \section{A direct approach to graph carsening}
+\label{sec:direct-coarsening}
 
 The approach to graph coarsening described in Section~\ref{sec:harp-coarsening} is a two step procedure -- the graph is first repeatedly coarsened and then refined back until reaching an optimal working point. As an alternative to this \enquote{there and back} approach, we proposed a direct approach to graph coarsening in \cite{prochazka_scalable_2022}.
 
@@ -101,3 +103,5 @@ We used 7 different publicly available datasets and for datasets with multiple c
 \end{figure}
 
 Apart from measuring the importance of different graph properties, the meta-model was also used to predict optimal values of hyperparameters for the underlying GraphSAGE model. This idea will be further described in Section \todo{ref}.
+
+\todo[inline]{CSP}
