@@ -83,14 +83,21 @@ Finally, the defining idea of \cite{prochazka_scalable_2022} is the order in whi
 	\label{fig:direct-graph-coarsening-results}
 \end{figure}
 
+\section{The effect of graph properties on downstream task performance}
 
+While typically in graph machine learning, the graph itself is taken as a given, in practice, this may not be the case and the question of how to transform the available data into a graph may affect the performance of the downstream task in a profound way. This problem is the motivation behind our work reported in \cite{prochazka_which_2023}. Given the complex and multi-faceted nature of this problem, we limited ourselves to the sub-problem of measuring and predicting the suitability of a given graph representation to a given downstream task.
 
+To solve this problem, we first represented the graph dataset by its \emph{properties}, that are aggregate values representing the whole graph dataset instead of individual nodes or edges. A GNN model \cite{hamilton_inductive_2017} was trained to solve the task, and its performance is measured using several metrics. The main aim of this work was to extract information about the usefulness of individual graph properties from a \emph{meta-model} that is trained on the graph dataset properties to predict the GNN performance represented by the \emph{performance metrics}.
+In the reported research, we proposed and evaluated such a meta-model on publicly available datasets, however, it forms a useful and general tool for evaluating the suitability of graph datasets to tasks on them, which is a basic prerequisite to solving the more general problem of constructing an advantageous graph representation.
 
+In total, we used 17 different graph properties, ranging from simple ones like node count and the ratio between different classes, standard properties used for describing graphs such as the average node degree, properties relating specifically to graph machine learning such as global assortativity and node, edge and class homophily and finally ending with some custom properties defined by us specifically for this work. We specifically chose this list of properties such that some of them are aware of the downstream task (i.e.\ labels), some take into account the graph structure and some operate on the features associated with the nodes of the graph.
 
+We used 7 different publicly available datasets and for datasets with multiple classes, we considered each of the classes as a separate binary classification problem independently, giving us a total of 139 different binary graph classification problems. For each of these 139 problems, we trained a GraphSAGE model and evaluated it using 5 different performance metrics. This list of graph properties together with the associated model performance metrics gives us a dataset to train the meta-model on. As the focus in the meta-model is on simplicity and explainability, a random forest regression model was used for this task, taking a third of the 139 data points as training data. The meata-model was experimentally verified to be a sufficiently good predictor of the model performance from the graph properties. Subsequently, the meta-model was used used to give an explanation of the importance of the various graph properties to the GNN performance using Shapley Additive Explanations (SHAP, see \cite{shapley_notes_1951}). The results of this experiment for the log-loss performance metric are shown in Figure~\ref{fig:graph-property-importance}. Overall the results vary between the different performance metrics, however, some universal rules can be observed, such as higher homophily (in all its variants) leading to better performance.
 
+\begin{figure}
+	\includegraphics[width=\linewidth]{images/graph-property-importance.pdf}
+	\caption{SHAP explanation for log loss prediction identifying node and edge homophily as the most important graph properties for the log-loss prediction. Therefore, we claim these graph properties to be the most important graph properties, when training GNN on the graph with log-loss objective. In addition, the SHAP explanation shows that the higher homophily the lower log-loss and therefore the better performance. Recall that the GNN aims to minimize log-loss. Original figure from \cite{prochazka_which_2023}.}
+	\label{fig:graph-property-importance}
+\end{figure}
 
-
-\begin{itemize}
-	\item Graph properties and their role in classification and its performance (\cite{prochazka_which_2023})
-	\item Maybe something more recent with explainability?
-\end{itemize}
+Apart from measuring the importance of different graph properties, the meta-model was also used to predict optimal values of hyperparameters for the underlying GraphSAGE model. This idea will be further described in Section \todo{ref}.
