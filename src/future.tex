@@ -1,8 +1,20 @@
-\chapter{Future ideas and intended directions}
+\chapter{Intended research directions}
 \label{chap:future}
 
-\begin{itemize}
-	\item Graph explainability
-	\item GNN HPO
-	\item Simple graph models such as RMG?
-\end{itemize}
+In this chapter, we outline the proposed future research directions and ideas. The main focus is \todo{Fill in afterwards}.
+
+\todo[inline]{Chapter outline}
+
+\section{Applications in cybersecurity}
+
+Cybersecurity is an ever-evolving field, constantly challenged by sophisticated attacks and the increasing complexity of digital infrastructures. As cyber threats grow more advanced, traditional security measures often fall short in detecting and mitigating these evolving threats. Graphs are a natural representation for many cybersecurity applications. For example, computer networks, social networks, and software codebases can all be modeled as graphs where nodes represent entities (such as devices, users, or functions) and edges represent the relationships or interactions between these entities. This representation enables a holistic view of the complex and interconnected nature of cybersecurity environments. By utilizing graph models, cybersecurity practitioners can analyze the interdependencies and patterns of behavior across entire networks, allowing for more effective threat detection and response.
+
+Graph Neural Networks (GNNs) extend the power of traditional graph-based models by incorporating deep learning techniques. Unlike conventional neural networks, GNNs are designed to operate directly on graphs, capturing both the features of individual nodes and the structural information of the graph as a whole. This capability makes GNNs particularly well-suited for cybersecurity tasks, such as identifying anomalous patterns in network traffic, detecting malware in executable files, or uncovering hidden relationships in social engineering attacks. By learning from the complex, high-dimensional data that typifies cybersecurity challenges, GNNs provide a robust approach to understanding and counteracting cyber threats.
+
+The application of graph machine learning to cybersecurity has been the primary motivation behind our research in the past as continues to be the main source of problems and ideas into the future. To underscore this, let us consider the research presented in Chapter~\ref{chap:my-research} -- The performance-complexity framework and both of the subsequent graph coarsening techniques were originally conceived to solve the problem of too large graphs in network traffic analysis, where a simple graph of network connections may have on the order of millions of nodes. Similarly, studying the effect graph properties have on downstream tasks (as presented in Section~\ref{sec:graph-property-effect}) is motivated by the problem of constructing a graph from data in such a way that the graph is both representative of the problem being solved and has advantageous properties for GNN processing. This is again a problem closely related to network traffic analysis, where large amounts of data are collected and the correct way of filtering them and constructing a graph from them is an open problem.\todo{If we add CSP, mention it here as well}
+
+\todo[inline]{Maybe introduce the particular problems we are solving? Along the lines of the "GNN-Based Malicious Network Entities Identification In Large-Scale Network Data" paper}
+
+Continuing into the future, this application domain remains of high interest to us. As shown by the previously conducted research, the problems arising from applying general machine learning models to a specific domain usually aren't limited to that singular domain or may be specific cases of obstacles to applying the methods more generally. Thus, although we seek to research algorithms and approaches that generalize across application domain, the choice of a specific domain as the intended usage of those approaches serves as a good guide to discovering relevant problems and interesting research opportunities.
+
+\section{Explainable graph models}
