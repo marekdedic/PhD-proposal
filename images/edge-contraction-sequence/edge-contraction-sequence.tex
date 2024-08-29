@@ -5,7 +5,7 @@
 \pgfplotsset{compat=newest}
 
 \begin{document}
-\begin{tikzpicture}
+\begin{tikzpicture}[scale=1, every node/.style={scale=0.8}]
 \tikzset{classA/.style={circle, draw=black, fill=blue!20!yellow}, node distance=1.5cm}
 \tikzset{classB/.style={circle, draw=black, fill=blue!20}, node distance=1.5cm}
 \tikzset{classX/.style={circle, draw=black, fill=red!20}, node distance=1.5cm}
@@ -22,7 +22,7 @@
     \draw [-] (C) -- (E) node [midway, fill=white, inner sep=0px] {4};  
     \draw [-] (C) -- (B) node [midway, fill=white, inner sep=0px] {6};    
     \draw [-] (D) -- (B) node [midway, fill=white, inner sep=0px] {7};
-    \draw[->, thick] ([xshift=3ex] E.center) -- ([xshift=7ex] E.center);
+    \draw[->, thick] ([xshift=4.5ex] E.center) -- ([xshift=8.5ex] E.center);
   \end{scope}
   
   \begin{scope}
@@ -37,7 +37,7 @@
     \draw [-] (D) -- (E) node [midway, fill=white, inner sep=0px] {3}; 
     \draw [-] (C) -- (E) node [midway, fill=white, inner sep=0px] {4};  
     \draw [-] (C) -- (AB) node [midway, fill=white, inner sep=0px] {6}; 
-    \draw[->, thick] ([xshift=3ex] E.center) -- ([xshift=7ex] E.center);
+    \draw[->, thick] ([xshift=4.5ex] E.center) -- ([xshift=8.5ex] E.center);
   \end{scope}  
   
   \begin{scope}
@@ -47,11 +47,11 @@
     \node[classB, below right of=AB] (E) {$\nu_{E}$};
     \draw [-] (AB) -- (CD) node [midway, fill=white, inner sep=0px] {5};
     \draw [-] (CD) -- (E) node [midway, fill=white, inner sep=0px] {3}; 
-    \draw[->, thick] ([xshift=3ex] E.center) -- ([xshift=7ex] E.center);
+    \draw[->, thick] ([xshift=4.5ex] E.center) -- ([xshift=8.5ex] E.center);
   \end{scope} 
   
   \begin{scope}
-  [xshift=10.7cm, yshift=-0.3cm]
+  [xshift=11.7cm, yshift=-0.3cm]
     \node[classA] (AB) {$\nu_{AB}$};
     \node[classB, below right of=AB] (CDE) {$\nu_{CDE}$};
     \draw [-] (AB) -- (CDE) node [midway, fill=white, inner sep=0px] {5};
@@ -59,7 +59,7 @@
   \end{scope}    
   
    \begin{scope}
-  [xshift=13.6cm, yshift=-1cm]
+  [xshift=15.1cm, yshift=-1cm]
     \node[classX] (ABCDE) {$\nu_{ABCDE}$};
   \end{scope}
 \end{tikzpicture}
