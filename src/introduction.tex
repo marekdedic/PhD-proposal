@@ -1,23 +1,45 @@
 \chapter{Introduction}
 
+\section{Motivation}
+
+Graphs are a powerful and versatile mathematical structure used to model relationships and interactions between entities in various complex systems. From social networks and biological systems to transportation networks and the World Wide Web, graphs naturally represent the interconnected nature of data in a way that traditional flat data structures cannot. With the explosion of available graph-structured data, there has been a growing need for advanced machine learning techniques that can effectively leverage the rich structural information inherent in graphs.
+
+Graph Neural Networks (GNNs) have emerged as a promising solution to this challenge. GNNs extend the capabilities of traditional neural networks to process graph-structured data, learning representations that capture both the features of individual nodes and the topology of the graph. This ability to learn from both node features and the graph’s structure has led to state-of-the-art performance on a wide range of tasks, including node classification, link prediction, and graph classification. By iteratively aggregating and transforming information from a node’s neighbors, GNNs can learn complex patterns and dependencies, making them exceptionally powerful for tasks that require understanding of relational data.
+
+However, despite their success, the adoption of GNNs in critical domains is often hindered by a lack of transparency and interpretability. As GNNs are applied to more sensitive areas such as healthcare, finance, and cybersecurity, understanding the rationale behind their predictions becomes crucial. Graph explainability seeks to bridge this gap by providing insights into the decision-making process of GNNs, highlighting which nodes, edges, and substructures in the graph are most influential in the model’s predictions. This transparency not only fosters trust in the models but also helps to uncover new knowledge in the underlying data, facilitating better decision-making and policy formulation.
+
+In this proposal, we present research carried out on graph machine learning algorithms, particularly their applications to very large graphs, where there often needs to be a decision about the optimal balance of model performance and computational complexity. We describe this trade-off decision and present three approaches that are useful in this situation. We also study the effect of structural properties of the used graph dataset on the machine learning model applied to it. This gives us a basis for decisions about the way the graphs are created and modified. We suggest a future research in the area of explainable graph machine learning, present the challenges that are present in this domain and the potential solutions stemming from our research so far. Moreover, we suggest a future research opportunity in hyperparameter optimization for graph neural networks that arose from our research into graph properties and their effect on the used neural models.
+
+\section{Proposal outline}
+
+Chapter~\ref{chap:sota} introduces graph machine learning, the tasks being solved on graphs with it and the most influential methods used over the last twenty years. Finally, methods for explainable graph machine learning are presented. Chapter~\ref{chap:my-research} present the research we carried out in the field of graph machine learning while Chapter~\ref{chap:future} proposes directions in which we want to direct our future investigations. Chapter~\ref{chap:conclusion} concludes the proposal by summarizing our contributions and future directions.
+
 \section{Notation}
 
-\begin{tabular}{ll}
-	\toprule
-	\textbf{Symbol} & \textbf{Meaning} \\
-	\midrule
-	\( \mathcal{G} \) & The space of all graphs \\
-	\( G = \left( V, E \right) \in \mathcal{G} \) & A graph \\
-	\( V \) & Set of nodes in a graph \\
-	\( E \subseteq V^2 \) & Set of edges in a graph \\
-	\( v_i \in V \) & A node \\
-	\( \mathspace{X} \) & A feature space \\
-	\( \mathvec{x}_i \in \mathspace{X} \) & A vector of features of \( v_i \) \\
-	\( \mathmat{X} \in \mathfield{R}^{\left\lvert V \right\rvert \times \left\lvert \mathspace{X} \right\rvert} \) & A graph node feature matrix	\\
-	\( \mathvec{x}_{ij} \in \mathspace{X} \) & A vector of features of \( \left( v_i, v_j \right) \) \\
-	\( \mathspace{Y} \) & A classification label space \\
-	\( G \left[ T \right] \) & A subgraph of \( G \) induced by the set \( T \in V \) \\
-	\( \mathrm{ne}[v_i] \) & The set of neighbours of \( v_i \), that is \( \mathrm{ne}[v_i] = \left\{ v_j \in V \middle| \left( v_i, v_j \right) \in E \right\} \) \\
-	\( \deg \left( v_i \right) \) & The degree of node \( v_i \), that is \( \deg \left( v_i \right) = \left\lvert \mathrm{ne}[v_i] \right\rvert \) \\
-	\bottomrule
-\end{tabular}
+Table~\ref{tab:notation} lists the notation used in the rest of this work. \todo{overflowing table}
+
+\begin{table}
+	\begin{ctucolortab}
+		\begin{tabular}{ll}
+			\toprule
+			\textbf{Symbol} & \textbf{Meaning} \\
+			\midrule
+			\( \mathcal{G} \) & The space of all graphs \\
+			\( G = \left( V, E \right) \in \mathcal{G} \) & A graph \\
+			\( V \) & Set of nodes in a graph \\
+			\( E \subseteq V^2 \) & Set of edges in a graph \\
+			\( v_i \in V \) & A node \\
+			\( \mathspace{X} \) & A feature space \\
+			\( \mathvec{x}_i \in \mathspace{X} \) & A vector of features of \( v_i \) \\
+			\( \mathmat{X} \in \mathfield{R}^{\left\lvert V \right\rvert \times \left\lvert \mathspace{X} \right\rvert} \) & A graph node feature matrix	\\
+			\( \mathvec{x}_{ij} \in \mathspace{X} \) & A vector of features of \( \left( v_i, v_j \right) \) \\
+			\( \mathspace{Y} \) & A classification label space \\
+			\( G \left[ T \right] \) & A subgraph of \( G \) induced by the set \( T \in V \) \\
+			\( \mathrm{ne}[v_i] \) & The set of neighbours of \( v_i \), that is \( \mathrm{ne}[v_i] = \left\{ v_j \in V \middle| \left( v_i, v_j \right) \in E \right\} \) \\
+			\( \deg \left( v_i \right) \) & The degree of node \( v_i \), that is \( \deg \left( v_i \right) = \left\lvert \mathrm{ne}[v_i] \right\rvert \) \\
+			\bottomrule
+		\end{tabular}
+	\end{ctucolortab}
+	\caption{The notation used in this work.}
+	\label{tab:notation}
+\end{table}
