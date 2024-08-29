@@ -3,7 +3,6 @@
 
 \section{Machine learning tasks on graphs}
 
-\todo{More general intro on graphs before GNNs}
 Graphs are a natural way of abstracting many mathematical problems and a versatile data structure used to represent relationships and interactions in various real-world domains such as chemistry, medicine, particle physics, social networks, medicine, fake-news detection, computer network security, autonomous vehicle guidance and others. Consequently, machine learning on graphs has, in recent years, seen an explosion in popularity, breadth and depth of both research and applications.
 
 Let us denote a \name{graph} \( G = \left( V, E \right)) \in \mathcal{G} \) where \( V \) is a set of the graph \name{nodes} and \( E \subseteq V^2 \) is a set of \name{edges} connecting the nodes. The questions of whether the edges should be directed, whether to allow self-loops and/or multiple edges between the same pair of nodes is in general not answered. Most of the discussed methods are agnostic to these choices, which are thus left to the user. Optionally, a vector of \name{node features} \( \mathvec{x}_i \in \mathspace{X} \) may be considered for each node \( v_i \in V \). Additionally, these feature vectors are often considered to form a \name{feature matrix} \( \mathmat{X} \in \mathfield{R}^{\left\lvert V \right\rvert \times \left\lvert \mathspace{X} \right\rvert} \) and this feature matrix is then considered to a part of the graph \( G \). In rare cases, a vector of \name{edge features} \( \mathvec{x}_{ij} \in \mathspace{X} \) is considered as well for all edges \( \left( v_i, v_j \right) \in E \). \todo{More definitions}
@@ -261,17 +260,6 @@ where \( \mathrm{AGGREGATE}_l \) is a configurable aggregation function. In theo
 
 In summary, GraphSAGE represents a significant advancement in the field of graph-based machine learning, providing a robust framework for inductive node embeddings that generalize to new graphs and unseen nodes. By leveraging node features and a flexible aggregation mechanism, GraphSAGE can efficiently produce embeddings that are useful for various downstream tasks, thus making it a valuable tool for evolving, real-world applications.
 
-\todo[inline,caption={}]{If there is time: WL test and expressivity in GNNs
-	\begin{itemize}
-		\item The WL test
-		\item The WL test and graph convolution
-		\item GIN?
-		\item Oversmoothing in graphs
-		\item Oversquashing in graphs
-		\item The 4 Gs?
-	\end{itemize}
-}
-
 \section{Explainability in graph machine learning}
 
 In recent years, explainability has emerged as a crucial area of research, particularly in the context of machine learning models applied to graph-structured data. As these models become more complex and are deployed in critical applications -- ranging from social network analysis to biological network exploration and financial fraud detection -- the ability to interpret and understand their predictions is increasingly important. Explainability in graph models not only enhances trust and transparency but also facilitates debugging and improves model performance by identifying biases or errors in data. This section delves into various methodologies for explaining graph-based models, highlighting key techniques and tools that have been developed to interpret their outputs effectively. We will explore approaches that elucidate the decision-making processes of these models, ensuring their predictions are comprehensible and reliable to both experts and non-experts alike.
@@ -283,8 +271,6 @@ Over the recent years, a large number of graph explanation algorithms has been p
 	\caption{An overview of the taxonomy of graph explainability methods. Original figure from \cite{yuan_explainability_2022}.}
 	\label{fig:graph-explainability-taxonomy}
 \end{figure}
-
-\todo[inline]{Gradient-based instance-level methods -- Grad-CAM}
 
 \subsection{Surrogate methods}
 
