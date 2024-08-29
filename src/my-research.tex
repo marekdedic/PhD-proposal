@@ -105,6 +105,7 @@ We used 7 different publicly available datasets and for datasets with multiple c
 Apart from measuring the importance of different graph properties, the meta-model was also used to predict optimal values of hyperparameters for the underlying GraphSAGE model. This idea will be further described in Section~\ref{sec:gnn-hpo}.
 
 \section{A simple, scalable algorithm for signal propagation in hypergraphs}
+\label{sec:CSP}
 
 In Section~\ref{sec:performance-complexity}, the performance-complexity trade-off was introduced and subsequently, two approaches to graph coarsening were explored. Simplifying the dataset is, however, only one possible way of tackling the problem of high computational complexity. Another option is to simplify the algorithms themselves so that they may run even on very large datasets. In \cite{prochazka_convolutional_2024}, we introduce \name{Convolutional Signal Propagation} (CSP), a simple and scalable algorithm operating on hypergraphs. CSP has no hyperparameters to tune and is itself a parameter-free method, meaning it doesn't require any training and can be directly applied to a dataset.
 
