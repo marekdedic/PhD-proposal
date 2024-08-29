@@ -29,14 +29,22 @@ Table~\ref{tab:notation} lists the notation used in the rest of this work.
 			\( V \) & Set of nodes in a graph \\
 			\( E \subseteq V^2 \) & Set of edges in a graph \\
 			\( v_i \in V \) & A node \\
-			\( \mathspace{X} \) & A feature space \\
+			\( \mathmat{A} \) & The adjacency matrix of a graph \\
+			\( \mathrm{ne}[v_i] \) & The neighborhood of \( v_i \), that is \( \mathrm{ne}[v_i] = \left\{ v_j \in V \middle| \left( v_i, v_j \right) \in E \right\} \) \\
+			\( \mathdeg \left( v_i \right) \) & The degree of node \( v_i \), that is \( \mathdeg \left( v_i \right) = \left\lvert \mathrm{ne}[v_i] \right\rvert \) \\
 			\( \mathvec{x}_i \in \mathspace{X} \) & A vector of features of \( v_i \) \\
+			\( \mathspace{X} \) & A feature space \\
 			\( \mathmat{X} \in \mathfield{R}^{\left\lvert V \right\rvert \times \left\lvert \mathspace{X} \right\rvert} \) & A graph node feature matrix	\\
 			\( \mathvec{x}_{ij} \in \mathspace{X} \) & A vector of features of \( \left( v_i, v_j \right) \) \\
 			\( \mathspace{Y} \) & A classification label space \\
 			\( G \left[ T \right] \) & A subgraph of \( G \) induced by the set \( T \in V \) \\
-			\( \mathrm{ne}[v_i] \) & The set of neighbours of \( v_i \), that is \( \mathrm{ne}[v_i] = \left\{ v_j \in V \middle| \left( v_i, v_j \right) \in E \right\} \) \\
-			\( \deg \left( v_i \right) \) & The degree of node \( v_i \), that is \( \deg \left( v_i \right) = \left\lvert \mathrm{ne}[v_i] \right\rvert \) \\
+			\( H = \left( V, E \right) \) & A hypergraph \\
+			\( \mathmat{H} \) & The incidence matrix of a (hyper)graph \\
+			\( \edeg \left( e_i \right) \) & The degree of edge \( e_i \), that is \( \edeg \left( e_i \right) = \left\lvert e_i \right\rvert \) \\
+			\( \mathcal{O} \left( \cdot \right) \) & An asymptotic complexity class \\
+			\( \mathrm{H} \left( X \right) \) & The Shannon entropy of a random variable \( X \) \\
+			\( \mathrm{H} \left( X \middle| Y \right) \) & The conditional entropy of \( X \) given \( Y \) \\
+			\( \mathrm{MI} \left( X, Y \right) \) & The mutual information between random variables \( X \) and \( Y \) \\
 			\bottomrule
 		\end{tabular}
 	\end{ctucolortab}

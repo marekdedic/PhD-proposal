@@ -86,10 +86,6 @@ Finally, the defining idea of \cite{prochazka_scalable_2022} is the order in whi
 
 In Section~\ref{sec:performance-complexity}, the performance-complexity trade-off was introduced and subsequently, two approaches to graph coarsening were explored. Simplifying the dataset is, however, only one possible way of tackling the problem of high computational complexity. Another option is to simplify the algorithms themselves so that they may run even on very large datasets. In \cite{prochazka_convolutional_2024}, we introduce \name{Convolutional Signal Propagation} (CSP), a simple and scalable algorithm operating on hypergraphs. CSP has no hyperparameters to tune and is itself a parameter-free method, meaning it doesn't require any training and can be directly applied to a dataset.
 
-Let us denote \( H = \left( V, E \right) \) a \name{hypergraph}, where \( V \) is a set of nodes and \( E = \left\{ e_1, e_2, \dots e_m \right\} \subseteq 2^V \) is a set of \name{hyperedges}. The structure of the hypergraph can also be described by an \name{incidence matrix} \( \mathmat{H} \in \{ 0, 1 \}^{n \times m}\), where \( \mathmat{H}_{i, j} = 1 \) if \( v_i \in e_j \), and \( 0 \) otherwise.
-
-In addition to the node degree \( \mathdeg \left( v \right) \), we define the degree \( \edeg \left( e \right) \) of the edge \( e \) is defined as the number of nodes it contains, i.e. \( \edeg \left( e \right) = \left\lvert e \right\rvert \). We also establish a diagonal node-degree matrix \( \mathmat{D}_v \in \mathfield{N}^{n \times n} \) with \( (\mathmat{D}_v)_{i,i} = \mathdeg \left( v_i \right) \) and \( (\mathmat{D}_v)_{i,j} = 0 \) for \( i \neq j \). Analogously, the hyperedge-degree matrix is a diagonal matrix \( \mathmat{D}_e \in \mathfield{N}^{m \times m} \) with \( (\mathmat{D}_e)_{i,i} = \edeg \left( e_i \right) \) and \( (\mathmat{D}_e)_{i,j} = 0 \) for \( i \neq j \).
-
 We consider for each node in the hypergraph some kind of signal that is to be propagated through the hyperedges. Let the signal be a \( d \)-dimensional vector \( \mathvec{x}_i \) for each node, giving for the whole hypergraph a matrix \( \mathmat{X} \in \mathfield{R}^{n \times d} \). The proposed algorithm propagates this signal $\mathmat{X}$ through the hypergraph $H$. The basic version of CSP consists in a simple averaging of \( \mathmat{X} \) across the hyperedges and nodes of the graph. This averaging can be repeated to obtain smoother final representations, resulting in a multi-step CSP process generating a sequence of representations \( \mathmat{X}^{(l)} \), where \( \mathmat{X}^{(0)} = \mathmat{X} \).
 
 In each step, the representation $\mathmat{X}^{(l)}$ of the nodes is first propagated to the hyperedges to obtain their representations 
@@ -105,7 +101,7 @@ The steps~\ref{eq:CSP-edge-score} and~\ref{eq:CSP-node-score} constitute the pro
 \begin{equation}\label{eq:CSP-one-node}
     \mathvec{x}_k^{(l+1)} = \frac{1}{\mathdeg \left( v_k \right)}\sum_{\substack{j \\ v_k \in e_j}} \frac{1}{\edeg \left( e_j \right)}\sum_{\substack{i \\ v_i \in e_j}} \mathvec{x}_i^{(l)}.
 \end{equation}
-Equation~\ref{eq:CSP-one-node} can be rewritten into the matrix form
+We establish a diagonal node-degree matrix \( \mathmat{D}_v \in \mathfield{N}^{n \times n} \) with \( (\mathmat{D}_v)_{i,i} = \mathdeg \left( v_i \right) \) and \( (\mathmat{D}_v)_{i,j} = 0 \) for \( i \neq j \). Analogously, the hyperedge-degree matrix is a diagonal matrix \( \mathmat{D}_e \in \mathfield{N}^{m \times m} \) with \( (\mathmat{D}_e)_{i,i} = \edeg \left( e_i \right) \) and \( (\mathmat{D}_e)_{i,j} = 0 \) for \( i \neq j \). Equation~\ref{eq:CSP-one-node} can then be rewritten into the matrix form
 \begin{equation}
     \mathmat{X}^{(l+1)} = \mathmat{D}_v^{-1} \mathmat{H} \mathmat{D}_e^{-1} \mathmat{H}^T \mathmat{X}^{(l)}.
 \end{equation}
