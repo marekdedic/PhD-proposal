@@ -5,9 +5,11 @@
 
 Graphs are a natural way of abstracting many mathematical problems and a versatile data structure used to represent relationships and interactions in various real-world domains such as chemistry, medicine, particle physics, social networks, medicine, fake-news detection, computer network security, autonomous vehicle guidance and others. Consequently, machine learning on graphs has, in recent years, seen an explosion in popularity, breadth and depth of both research and applications.
 
-Let us denote a \name{graph} \( G = \left( V, E \right)) \in \mathcal{G} \) where \( V \) is a set of the graph \name{nodes} and \( E \subseteq V^2 \) is a set of \name{edges} connecting the nodes. The questions of whether the edges should be directed, whether to allow self-loops and/or multiple edges between the same pair of nodes is in general not answered. Most of the discussed methods are agnostic to these choices, which are thus left to the user. Optionally, a vector of \name{node features} \( \mathvec{x}_i \in \mathspace{X} \) may be considered for each node \( v_i \in V \). Additionally, these feature vectors are often considered to form a \name{feature matrix} \( \mathmat{X} \in \mathfield{R}^{\left\lvert V \right\rvert \times \left\lvert \mathspace{X} \right\rvert} \) and this feature matrix is then considered to a part of the graph \( G \). In rare cases, a vector of \name{edge features} \( \mathvec{x}_{ij} \in \mathspace{X} \) is considered as well for all edges \( \left( v_i, v_j \right) \in E \). \todo{More definitions}
+Let us denote a \name{graph} \( G = \left( V, E \right)) \in \mathcal{G} \) where \( V \) is a set of the graph \name{nodes} and \( E \subseteq V^2 \) is a set of \name{edges} connecting the nodes. The questions of whether the edges should be directed, whether to allow self-loops and/or multiple edges between the same pair of nodes is in general not answered. Most of the discussed methods are agnostic to these choices, which are thus left to the user. Optionally, a vector of \name{node features} \( \mathvec{x}_i \in \mathspace{X} \) may be considered for each node \( v_i \in V \). Additionally, these feature vectors are often considered to form a \name{feature matrix} \( \mathmat{X} \in \mathfield{R}^{\left\lvert V \right\rvert \times \left\lvert \mathspace{X} \right\rvert} \) and this feature matrix is then considered to a part of the graph \( G \). In rare cases, a vector of \name{edge features} \( \mathvec{x}_{ij} \in \mathspace{X} \) is considered as well for all edges \( \left( v_i, v_j \right) \in E \).
+\todo{More definitions}
+\todo{Adjacency matrix}
 
-While in traditional machine learning, the range of tasks is usually fairly limited, there are four primary ways of applying machine learning algorithms to graph-structured data; node classification, link prediction, learning over the whole graph and community detection. All four of these tasks share some similarities and various machine learning methods on graphs may be applied to multiple tasks or may be adapted from one task to another. However, this is not a universal property with some methods being specific to one task, or even a particular subclass of that task.
+There are four primary ways of applying machine learning algorithms to graph-structured data; node classification, link prediction, learning over the whole graph and community detection. All four of these tasks share some similarities and various machine learning methods on graphs may be applied to multiple tasks or may be adapted from one task to another. However, this is not a universal property with some methods being specific to one task, or even a particular subclass of that task.
 
 \subsection{Node classification}
 
@@ -74,22 +76,24 @@ where \( y_i \) is the label of node \( v_i \), and \( \mathvec{h}_{\mathrm{ne}[
 \end{equation}
 
 Considering for the whole graph a hidden state matrix \( \mathmat{H} \) and a label vector \( \mathvec{y} \), Equations~\ref{eq:gori-state} and~\ref{eq:gori-output} may be rewritten in a stacked form as
-\begin{equation}\label{eq:gori-stacked}
-	\begin{split}
-		\mathmat{H} &= F_\theta \left( \mathmat{H}, \mathvec{y} \right) \\
-		\mathmat{O} &= G_\theta \left( \mathmat{H}, \mathvec{y} \right)
-	\end{split}
+\begin{equation}\label{eq:gori-stacked-state}
+	\mathmat{H} = F_\theta \left( \mathmat{H}, \mathvec{y} \right) \\
 \end{equation}
-where \( F_\theta \) and \( G_\theta \) are compositions of \( \left\lvert V \right\rvert \) instances of \( f_\theta \) and \( g_\theta \), respectively. A key observation of the original work is the fact that the Banach fixed point theorem guarantees that if \( F_\theta \) is a contraction mapping, then Equation~\ref{eq:gori-stacked} has a solution and that this solution is unique. Moreover, the theorem states that the following simple iterative system converges exponentially fast to the solution of Equation~\ref{eq:gori-stacked} for any initial state:
+and
+\begin{equation}\label{eq:gori-stacked-output}
+	\mathmat{O} = G_\theta \left( \mathmat{H}, \mathvec{y} \right)
+\end{equation}
+where \( F_\theta \) and \( G_\theta \) are compositions of \( \left\lvert V \right\rvert \) instances of \( f_\theta \) and \( g_\theta \), respectively. A key observation of the original work is the fact that the Banach fixed point theorem guarantees that if \( F_\theta \) is a contraction mapping, then Equation~\ref{eq:gori-stacked-state} has a solution and that this solution is unique. Moreover, the theorem states that the following simple iterative system converges exponentially fast to the solution of Equation~\ref{eq:gori-stacked-state} for any initial state:
 \begin{equation}
 	\mathmat{H}^{(t+1)} = F_\theta \left( \mathmat{H}^{(t)}, \mathvec{y} \right).
 \end{equation}
-This allows us to obtain the values of \( \mathvec{h}_i \) and \( \mathvec{o}_i \) by iterating the following system:
+This allows us to obtain the values of \( \mathvec{h}_i \) by iterating the following system:
 \begin{equation}\label{eq:gori-iterative}
-	\begin{split}
-		\mathvec{h}_i^{(t+1)} &= f_\theta \left( y_i, \mathvec{h}_{\mathrm{ne}[v_i]}^{(t)}, y_{\mathrm{ne}[v_i]} \right) \\
-		\mathvec{o}_i^{(t+1)} &= g_\theta \left( \mathvec{h}_i^{(t+1)}, y_i \right)
-	\end{split}
+	\mathvec{h}_i^{(t+1)} = f_\theta \left( y_i, \mathvec{h}_{\mathrm{ne}[v_i]}^{(t)}, y_{\mathrm{ne}[v_i]} \right) \\
+\end{equation}
+and read out the outputs in each step as
+\begin{equation}
+	\mathvec{o}_i^{(t)} = g_\theta \left( \mathvec{h}_i^{(t)}, y_i \right)
 \end{equation}
 
 The learning algorithm then consists of two phases:
